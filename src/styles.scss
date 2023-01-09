@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+  margin: 0; padding: 0;
+  color: white;
+  background-color: darkslategray;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+button {
+  color: rgba(white, .8);
+  background-color: rgba(black, .4);
+  border: none;
+  border-radius: 4px;
+}

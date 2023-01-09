@@ -11,11 +11,15 @@ type SoundLibraryType = ArrayElement<typeof SOUNDS_LIBRARY>
 })
 export class AudioService {
 
+  gain = 1;
+
   private readonly audioCtx: AudioContext | null = null;
   private readonly buffers: Map<SoundsEnum, AudioBuffer> = new Map();
+  private readonly gainNode: GainNode | null = null;
 
   constructor() {
     this.audioCtx = new AudioContext();
+    this.gainNode = this.audioCtx.createGain();
 
     SOUNDS_LIBRARY.forEach((soundName) => {
       this._loadAudio(`./assets/audio/DTV1/[DTV1]_${soundName}_01.wav`)
@@ -26,11 +30,13 @@ export class AudioService {
   }
 
 
-  public playSound(sound: SoundsEnum) {
-    if (!this.audioCtx) throw Error();
+  public playSound(sound: SoundsEnum, gain: 0 | 1 | 2) {
+    if (!this.audioCtx || !this.gainNode) throw Error();
     const source = this.audioCtx.createBufferSource();
     source.buffer = this._getBuffer(sound);
-    source.connect(this.audioCtx.destination);
+    source.connect(this.gainNode);
+    this.gainNode.gain.value = gain === 1 ? 0.5 * this.gain : this.gain;
+    this.gainNode.connect(this.audioCtx.destination);
     source.start(0);
     source.stop(source.buffer.length);
     source.onended = function() {
@@ -38,6 +44,12 @@ export class AudioService {
       source.disconnect();
     }
 
+  }
+
+  public setVolume(gain: number) {
+    if (!this.gainNode) throw Error();
+    this.gainNode.gain.value = gain;
+    this.gain = gain;
   }
 
   private _getBuffer(sound: SoundsEnum): AudioBuffer {

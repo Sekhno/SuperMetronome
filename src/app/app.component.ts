@@ -5,6 +5,7 @@ import {Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
 import {SoundsEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
+import {METRONOME_GRID, NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
 
 
 @Component({
@@ -17,12 +18,20 @@ import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
 })
 export class AppComponent implements OnInit {
 
+  isShowCountSelect = false;
+  countPreStart: 1 | 2 | null = null;
+  bars = 1;
+
+  rhythms = DATA_GRIDS;
+  grids = GridsEnum;
+  activeGrid: GridsEnum = GridsEnum.Metronome;
   metronome: Subscription | null = null;
 
   formGroupControls = new FormGroup<IFormGroupControl>({
     playing: new FormControl(false, { nonNullable: true }),
     bpm: new FormControl(100, { nonNullable: true }),
-
+    volume: new FormControl(100, { nonNullable: true }),
+    swing: new FormControl(0, { nonNullable: true })
   });
 
   formGroupBeats = new FormGroup<IFormGroupBeats>({
@@ -30,16 +39,10 @@ export class AppComponent implements OnInit {
     subs: new FormControl(4, { nonNullable: true })
   })
 
-  formGroupGroove = AppComponent._getFormGroupGroove(4,4);
+  formGroupGroove = AppComponent._getFormGroupGroove(4,4, METRONOME_GRID);
 
-  constructor(
-    private audio: AudioService,
-    private cdr: ChangeDetectorRef
-  ) {}
-
-  public play() {
-    this.audio.playSound(SoundsEnum.HiHat);
-    this.audio.playSound(SoundsEnum.Kick);
+  public get playing(): boolean {
+    return this.formGroupControls.controls.playing.value;
   }
 
   public get bpm() {
@@ -52,6 +55,10 @@ export class AppComponent implements OnInit {
 
   public get subs() {
     return this.formGroupBeats.controls.subs.value;
+  }
+
+  public get swing() {
+    return this.formGroupControls.controls.swing.value;
   }
 
   public decBPM() {
@@ -96,6 +103,11 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public setGrid(grid: GridsEnum) {
+    this.activeGrid = grid;
+    this.formGroupGroove = AppComponent._getFormGroupGroove(4,4, Grids.get(grid));
+  }
+
   private _play() {
     const dueTime = 0;
     const { bpm } = this.formGroupControls.value;
@@ -106,51 +118,67 @@ export class AppComponent implements OnInit {
     const length = beats * subs - 2;
     let bit = -1;
     this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
+      if (bit > length) this.bars++;
       bit = bit > length ? -1 : bit;
-      bit += 1;
+      bit++;
 
-      // console.log('Bit: ' + bit);
+      if (hh.controls[bit].value) this.audio.playSound(SoundsEnum.HiHat, hh.controls[bit].value);
+      if (snare.controls[bit].value) this.audio.playSound(SoundsEnum.Snare, snare.controls[bit].value);
+      if (kick.controls[bit].value) this.audio.playSound(SoundsEnum.Kick, kick.controls[bit].value);
 
-      if (hh.controls[bit].value) this.audio.playSound(SoundsEnum.HiHat);
-      if (snare.controls[bit].value) this.audio.playSound(SoundsEnum.Snare);
-      if (kick.controls[bit].value) this.audio.playSound(SoundsEnum.Kick);
+      this.cdr.markForCheck();
     });
   }
 
   private _stop() {
     this.metronome?.unsubscribe();
+    this._resetBars();
+  }
+
+  private _resetBars() {
+    this.bars = 1;
   }
 
   private _onSubscribe() {
-    this.formGroupControls.valueChanges.subscribe(({ bpm, playing }) => {
+    this.formGroupControls.valueChanges.subscribe(({ bpm, playing, volume }) => {
       this._stop();
       playing && this._play();
     });
+    this.formGroupControls.controls.volume.valueChanges.subscribe((gain) => {
+      this.audio.setVolume(0.01*gain);
+    })
 
     this.formGroupBeats.valueChanges.subscribe(({ beats, subs }) => {
       if (!beats || !subs) throw Error();
-      this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs);
+      this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, METRONOME_GRID);
 
     })
 
-    this.formGroupGroove.valueChanges.subscribe(console.log)
+    // this.formGroupGroove.valueChanges.subscribe(console.log)
   }
 
-  private static _getFormGroupGroove(beats: number, subs: number) {
+  private static _getFormGroupGroove(beats: number, subs: number, notes: NotesType = [[], [], []]) {
+    const [ hh, snare, kick ] = notes;
+
     return new FormGroup({
-      hh: AppComponent._getFormArrayByLength(beats * subs),
-      snare: AppComponent._getFormArrayByLength(beats * subs),
-      kick: AppComponent._getFormArrayByLength(beats * subs)
+      hh: AppComponent._getFormArrayByLength(beats * subs, hh),
+      snare: AppComponent._getFormArrayByLength(beats * subs, snare),
+      kick: AppComponent._getFormArrayByLength(beats * subs, kick)
     })
   }
 
-  private static _getFormArrayByLength(length: number) {
+  private static _getFormArrayByLength(length: number, note: NoteType) {
     const arr = []
     for (let i = 0; i < length; i++) {
-      arr.push(new FormControl(false, { nonNullable: true }))
+      arr.push(new FormControl(note[i], { nonNullable: true }))
     }
     return new FormArray(arr);
   }
+
+  constructor(
+    private audio: AudioService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this._onSubscribe();
