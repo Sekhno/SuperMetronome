@@ -61,6 +61,10 @@ export class AppComponent implements OnInit {
     return this.formGroupControls.controls.swing.value;
   }
 
+  public get volume() {
+    return this.formGroupControls.controls.volume.value
+  }
+
   public decBPM() {
     let value = this.formGroupControls.controls.bpm.value;
     if (value) {
