@@ -4,6 +4,7 @@ body {
   margin: 0; padding: 0;
   color: white;
   background-color: darkslategray;
+  box-shadow: 0 1px 0 rgba(black, .2);
 }
 
 *, *:before, *:after {
@@ -16,7 +17,8 @@ ul {
 }
 
 button {
-  color: rgba(white, .8);
+  color: rgba(white, .6);
+  text-transform: uppercase;
   background-color: rgba(black, .4);
   border: none;
   border-radius: 4px;
@@ -89,4 +91,24 @@ input[type="range"]:focus::-moz-range-thumb {
   border: 1px solid #053a5f;
   outline: 3px solid #053a5f;
   outline-offset: 0.125rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(white, .2);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(black, .6);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(black, .8);
 }

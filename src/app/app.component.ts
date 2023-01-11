@@ -6,6 +6,8 @@ import {AudioService} from './core/services/audio.service';
 import {SoundsEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
 import {METRONOME_GRID, NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
+import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
+import {DATA_SOUNDS} from "./core/types/sounds";
 
 
 @Component({
@@ -23,9 +25,13 @@ export class AppComponent implements OnInit {
   bars = 1;
 
   rhythms = DATA_GRIDS;
+  sounds = DATA_SOUNDS;
   grids = GridsEnum;
   activeGrid: GridsEnum = GridsEnum.Metronome;
   metronome: Subscription | null = null;
+  sections = CONTROL_SECTION_VALUES;
+  curSection = ControlSectionRoute.Edit;
+  curBit = -1;
 
   formGroupControls = new FormGroup<IFormGroupControl>({
     playing: new FormControl(false, { nonNullable: true }),
@@ -120,15 +126,17 @@ export class AppComponent implements OnInit {
     const { hh, snare, kick } = this.formGroupGroove.controls;
     const periodOrScheduler = ((60 / bpm) * 1000 ) / beats;
     const length = beats * subs - 2;
-    let bit = -1;
-    this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
-      if (bit > length) this.bars++;
-      bit = bit > length ? -1 : bit;
-      bit++;
 
-      if (hh.controls[bit].value) this.audio.playSound(SoundsEnum.HiHat, hh.controls[bit].value);
-      if (snare.controls[bit].value) this.audio.playSound(SoundsEnum.Snare, snare.controls[bit].value);
-      if (kick.controls[bit].value) this.audio.playSound(SoundsEnum.Kick, kick.controls[bit].value);
+    this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
+      if (this.curBit > length) {
+        this.bars++;
+        this._resetCurBit();
+      }
+      this.curBit++;
+
+      if (hh.controls[this.curBit].value) this.audio.playSound(SoundsEnum.HiHat, hh.controls[this.curBit].value);
+      if (snare.controls[this.curBit].value) this.audio.playSound(SoundsEnum.Snare, snare.controls[this.curBit].value);
+      if (kick.controls[this.curBit].value) this.audio.playSound(SoundsEnum.Kick, kick.controls[this.curBit].value);
 
       this.cdr.markForCheck();
     });
@@ -137,10 +145,15 @@ export class AppComponent implements OnInit {
   private _stop() {
     this.metronome?.unsubscribe();
     this._resetBars();
+    this._resetCurBit();
   }
 
   private _resetBars() {
     this.bars = 1;
+  }
+
+  private _resetCurBit() {
+    this.curBit = -1
   }
 
   private _onSubscribe() {
