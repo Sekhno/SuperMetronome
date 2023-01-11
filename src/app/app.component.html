@@ -14,7 +14,7 @@
       </div>
     </td>
     <td>
-      <button>tap</button>
+      <button class="btn-tap">tap</button>
     </td>
     <ng-container [formGroup]="formGroupBeats">
       <td>
@@ -39,6 +39,7 @@
       <div class="label">volume</div>
       <label class="volume-range">
         <input type="range" min="0" max="300" formControlName="volume">
+        <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
       </label>
 
     </td>
@@ -85,7 +86,7 @@
       <section [formGroup]="formGroupGroove">
         <div class="fieldset" formArrayName="hh" [ngClass]="'fieldset-' + subs">
           <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
-            <label for="hh_{{i}}" [attr.data-check]="_.value">
+            <label for="hh_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}">
               <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
             </label>
 
@@ -94,7 +95,7 @@
         </div>
         <div class="fieldset" formArrayName="snare" [ngClass]="'fieldset-' + subs">
           <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
-            <label for="snare_{{i}}" [attr.data-check]="_.value">
+            <label for="snare_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}">
               <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
             </label>
 
@@ -102,7 +103,7 @@
         </div>
         <div class="fieldset" formArrayName="kick" [ngClass]="'fieldset-' + subs">
           <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
-            <label for="kick_{{i}}" [attr.data-check]="_.value">
+            <label for="kick_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}">
               <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
             </label>
 
@@ -112,11 +113,12 @@
     </td>
   </tr>
   <tr>
-    <td colspan="3">
-      <button>edit</button>
-      <button>patterns</button>
-      <button>sounds</button>
-      <button>mixer</button>
+    <td colspan="3" class="navigate-section">
+      <button *ngFor="let s of sections"
+              [ngClass]="{active: curSection === s}"
+              (click)="curSection = s"
+      > {{ s }} </button>
+
     </td>
     <td colspan="3">
       <button>save</button>
@@ -145,7 +147,11 @@
               > {{ r.value }} </li>
             </ul>
           </td>
-          <td>StandardSet</td>
+          <td>
+            <ul>
+              <li *ngFor="let s of sounds"> {{ s.value }} </li>
+            </ul>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -155,100 +161,3 @@
 
 
 
-
-
-
-<!--<section class="wrapper">-->
-<!--  <div class="top-control">-->
-<!--    <form class="controls" [formGroup]="formGroupControls">-->
-<!--      <div class="play-control">-->
-<!--        <div class="btn-play">-->
-<!--          <input type="checkbox" formControlName="playing" id="play">-->
-<!--          <label for="play"></label>-->
-<!--        </div>-->
-<!--        <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">-->
-<!--          <button (click)="isShowCountSelect = !isShowCountSelect">count <br> {{ countPreStart }}</button>-->
-<!--          <div class="select" *ngIf="isShowCountSelect">-->
-<!--            <div class="option" (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false">1</div>-->
-<!--            <div class="option" (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false">2</div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-
-<!--      <div class="bpm-control">-->
-<!--        <p> {{ bars }} {{ playing ? 'bars' : null }} </p>-->
-<!--        <h1> BPM </h1>-->
-<!--        <p> {{ bpm }} </p>-->
-<!--        <button (click)="decBPM()"> - </button>-->
-<!--        <button (click)="incBPM()"> + </button>-->
-<!--      </div>-->
-
-<!--      <div class="temp-control">-->
-<!--        <div class="section-control">-->
-<!--          <div>-->
-<!--            <button> tap </button>-->
-<!--            <button> progressive tempo </button>-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            <form [formGroup]="formGroupBeats">-->
-<!--              <div class="beats-control">-->
-<!--                <h1> Beats </h1>-->
-<!--                <div>-->
-<!--                  <button (click)="decBeats()"> - </button>-->
-<!--                  <span> {{ beats }} </span>-->
-<!--                  <button (click)="incBeats()"> + </button>-->
-<!--                </div>-->
-
-<!--                <h1> Subs </h1>-->
-<!--                <div>-->
-<!--                  <button (click)="decSubs()"> - </button>-->
-<!--                  <span> {{ subs }} </span>-->
-<!--                  <button (click)="incSubs()"> + </button>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </form>-->
-<!--            <button> Beat hider </button>-->
-<!--          </div>-->
-<!--          <div>3</div>-->
-<!--        </div>-->
-<!--        <div class="temp-range-control">-->
-<!--          <input type="range" min="40" max="250" formControlName="bpm">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </form>-->
-
-
-
-<!--    &lt;!&ndash;  Select beat&ndash;&gt;-->
-<!--    <select>-->
-<!--      <option value="metronome">Metronome</option>-->
-<!--      <option value="beat">Beat</option>-->
-<!--    </select>-->
-<!--  </div>-->
-
-
-
-
-<!--</section>-->
-
-<!--<section>-->
-<!--  <form [formGroup]="formGroupGroove">-->
-<!--    <div class="fieldset" formArrayName="hh" [ngClass]="'fieldset-' + subs">-->
-<!--      <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">-->
-<!--        <input type="checkbox" [formControlName]="i">-->
-<!--      </ng-container>-->
-
-<!--    </div>-->
-<!--    <div class="fieldset" formArrayName="snare" [ngClass]="'fieldset-' + subs">-->
-<!--      <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">-->
-<!--        <input type="checkbox" [formControlName]="i">-->
-<!--      </ng-container>-->
-<!--    </div>-->
-<!--    <div class="fieldset" formArrayName="kick" [ngClass]="'fieldset-' + subs">-->
-<!--      <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">-->
-<!--        <input type="checkbox" [formControlName]="i">-->
-<!--      </ng-container>-->
-<!--    </div>-->
-<!--  </form>-->
-<!--</section>-->
