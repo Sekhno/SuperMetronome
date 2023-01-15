@@ -72,5 +72,13 @@ export const DATA_SOUNDS: Array<{ key: SoundsEnum, value: string}> = [
   { key: SoundsEnum.RockSet, value: 'Rock Set' },
   { key: SoundsEnum.DBSet, value: 'D&B Set' },
   { key: SoundsEnum.OldDrumsSet, value: 'Old Drums' },
-  { key: SoundsEnum.RideDrumSet_01, value: 'Ride Drum Set 1' }
+  { key: SoundsEnum.RideDrumSet_01, value: 'Ride Drum Set 1' },
+  { key: SoundsEnum.RideDrumSet_02, value: 'Ride Drum Set 2' },
+  { key: SoundsEnum.SHoopDrumSet_01, value: 'SHoop Drum Set 1' },
+  { key: SoundsEnum.SHoopDrumSet_02, value: 'SHoop Drum Set 2' },
+  { key: SoundsEnum.PercussionSet_01, value: 'Percussion 1' },
+  { key: SoundsEnum.PercussionSet_02, value: 'Percussion 2' },
+  { key: SoundsEnum.PercuDrumsSet_01, value: 'Percu Drums 1' },
+  { key: SoundsEnum.PercuDrumsSet_02, value: 'Percu Drums 2' },
+  { key: SoundsEnum.JazzSet, value: 'Jazz Set' }
 ];
