@@ -139,7 +139,11 @@
         </thead>
         <tbody>
         <tr>
-          <td>All</td>
+          <td>
+            <ul>
+              <li *ngFor="let b of banks"> {{ b.value }} </li>
+            </ul>
+          </td>
           <td>
             <ul>
               <li *ngFor="let r of rhythms" (click)="setGrid(r.key)"

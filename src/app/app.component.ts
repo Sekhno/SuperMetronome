@@ -8,6 +8,7 @@ import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
 import {METRONOME_GRID, NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
 import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
 import {DATA_SOUNDS} from "./core/types/sounds";
+import {BANK_DATA} from "./core/types/bank";
 
 
 @Component({
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
   countPreStart: 1 | 2 | null = null;
   bars = 1;
 
+  banks = BANK_DATA;
   rhythms = DATA_GRIDS;
   sounds = DATA_SOUNDS;
   grids = GridsEnum;
