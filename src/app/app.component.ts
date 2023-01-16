@@ -9,6 +9,7 @@ import {METRONOME_GRID, NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from 
 import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
 import {DATA_SOUNDS} from "./core/types/sounds";
 import {BANK_DATA} from "./core/types/bank";
+import {TapTempo} from "./core/models/tapTempo";
 
 
 @Component({
@@ -21,6 +22,7 @@ import {BANK_DATA} from "./core/types/bank";
 })
 export class AppComponent implements OnInit {
 
+  tapTempo = new TapTempo();
   isShowCountSelect = false;
   countPreStart: 1 | 2 | null = null;
   bars = 1;
@@ -170,6 +172,12 @@ export class AppComponent implements OnInit {
     this.formGroupBeats.valueChanges.subscribe(({ beats, subs }) => {
       if (!beats || !subs) throw Error();
       this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, METRONOME_GRID);
+    });
+
+    this.tapTempo.bpm.subscribe((bmp) => {
+      if (bmp) {
+        this.formGroupControls.controls.bpm.patchValue(bmp);
+      }
 
     })
 
