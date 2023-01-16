@@ -11,4 +11,11 @@ bootstrapApplication(AppComponent, {
   ]
 }).then(() => {
   console.log('Bootstrap init!');
+  console.log(window.screen.orientation.type)
+
+  const type = 'landscape-primary';
+  screen.orientation.lock(type).then(() => {
+    console.log('Yes')
+  })
+
 });

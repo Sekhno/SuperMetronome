@@ -28,8 +28,7 @@ export class TapTempo {
   private _refresh() {
     if (this.times.length > 2){
       const average = this.times.reduce((result, t) => { return result += t }) / this.times.length
-      const bpm = (1 / (average / 1000)) * 60
-      // tapTempo.emit('tempo', bpm)
+      const bpm = (1 / (average / 1000)) * 60;
       this._subject.next(Math.round(bpm));
     }
   }
