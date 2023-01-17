@@ -3,13 +3,14 @@ import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/f
 import {CommonModule} from "@angular/common";
 import {Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
-import {SoundsEnum} from "./core/enums/sounds.enum";
+import {DrumHitsEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
-import {METRONOME_GRID, NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
+import {NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
 import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
-import {DATA_SOUNDS} from "./core/types/sounds";
-import {BANK_DATA} from "./core/types/bank";
+import {DATA_SOUNDS, RecomendationMap, SoundsEnum} from "./core/types/sounds";
+import {BANK_DATA, BankEnum, BankGrids} from "./core/types/bank";
 import {TapTempo} from "./core/models/tapTempo";
+import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {TapTempo} from "./core/models/tapTempo";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule]
+  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe]
 })
 export class AppComponent implements OnInit {
 
@@ -30,11 +31,15 @@ export class AppComponent implements OnInit {
   banks = BANK_DATA;
   rhythms = DATA_GRIDS;
   sounds = DATA_SOUNDS;
-  grids = GridsEnum;
-  activeGrid: GridsEnum = GridsEnum.Metronome;
+  activeSound = SoundsEnum.StandardSet;
+  gridsEnum = GridsEnum;
+  activeGrid: GridsEnum = GridsEnum.Beat_01;
+  bankEnum = BankEnum;
+  activeBank = BankEnum.All;
   metronome: Subscription | null = null;
   sections = CONTROL_SECTION_VALUES;
   curSection = ControlSectionRoute.Edit;
+  sectionRoutes = ControlSectionRoute;
   curBit = -1;
 
   formGroupControls = new FormGroup<IFormGroupControl>({
@@ -49,7 +54,7 @@ export class AppComponent implements OnInit {
     subs: new FormControl(4, { nonNullable: true })
   })
 
-  formGroupGroove = AppComponent._getFormGroupGroove(4,4, METRONOME_GRID);
+  formGroupGroove = AppComponent._getFormGroupGroove(4,4, Grids.get(GridsEnum.Beat_01));
 
   public get playing(): boolean {
     return this.formGroupControls.controls.playing.value;
@@ -120,6 +125,28 @@ export class AppComponent implements OnInit {
   public setGrid(grid: GridsEnum) {
     this.activeGrid = grid;
     this.formGroupGroove = AppComponent._getFormGroupGroove(4,4, Grids.get(grid));
+    this._autoSetRecomendationSound();
+  }
+
+  public setBank(bank: BankEnum) {
+    this.activeBank = bank;
+    this._autoSetGrid();
+  }
+
+  public setSounds(sound: SoundsEnum) {
+    this.activeSound = sound;
+  }
+
+  private _autoSetGrid() {
+    const grids = BankGrids.get(this.activeBank);
+    if (!grids || !grids.length) throw Error();
+    this.setGrid(grids[0]);
+  }
+
+  private _autoSetRecomendationSound() {
+    const sound = RecomendationMap.get(this.activeGrid);
+    if (!sound) throw Error();
+    this.setSounds(sound);
   }
 
   private _play() {
@@ -138,9 +165,9 @@ export class AppComponent implements OnInit {
       }
       this.curBit++;
 
-      if (hh.controls[this.curBit].value) this.audio.playSound(SoundsEnum.HiHat, hh.controls[this.curBit].value);
-      if (snare.controls[this.curBit].value) this.audio.playSound(SoundsEnum.Snare, snare.controls[this.curBit].value);
-      if (kick.controls[this.curBit].value) this.audio.playSound(SoundsEnum.Kick, kick.controls[this.curBit].value);
+      if (hh.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.HiHat, hh.controls[this.curBit].value);
+      if (snare.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.Snare, snare.controls[this.curBit].value);
+      if (kick.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.Kick, kick.controls[this.curBit].value);
 
       this.cdr.markForCheck();
     });
@@ -171,7 +198,7 @@ export class AppComponent implements OnInit {
 
     this.formGroupBeats.valueChanges.subscribe(({ beats, subs }) => {
       if (!beats || !subs) throw Error();
-      this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, METRONOME_GRID);
+      this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, Grids.get(GridsEnum.Beat_01));
     });
 
     this.tapTempo.bpm.subscribe((bmp) => {

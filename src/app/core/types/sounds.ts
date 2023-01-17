@@ -1,4 +1,4 @@
-import {GridsEnum, METRONOME_GRID} from "./notes";
+import {GridsEnum} from "./notes";
 
 export enum SoundsEnum {
   Clicks_01 = 'CLICKS_01_SET',

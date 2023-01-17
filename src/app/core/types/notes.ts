@@ -2,12 +2,11 @@ export type NotesType = [ NoteType, NoteType, NoteType ]
 
 export type NoteType = Array<0 | 1 | 2 >;
 
-export const METRONOME_GRID: NotesType = [
+const METRONOME_GRID: NotesType = [
   [2, 0, 0, 0,  2, 0, 0, 0,  2, 0, 0, 0,  2, 0, 0, 0],
   [0],
   [0]
 ];
-
 const BEAT_01_GRID: NotesType = [
   [2, 0, 1, 0,  2, 0, 1, 0,  2, 0, 1, 0,  2, 0, 1, 0],
   [0, 0, 0, 0,  2, 0, 0, 0,  0, 0, 0, 0,  2, 0, 0, 0],
