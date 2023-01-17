@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SoundsEnum } from '../enums/sounds.enum';
+import { DrumHitsEnum } from '../enums/sounds.enum';
 import { ArrayElement } from '../types/utils';
 
-const SOUNDS_LIBRARY = [SoundsEnum.HiHat, SoundsEnum.Snare, SoundsEnum.Kick] as const;
+const SOUNDS_LIBRARY = [DrumHitsEnum.HiHat, DrumHitsEnum.Snare, DrumHitsEnum.Kick] as const;
 
 type SoundLibraryType = ArrayElement<typeof SOUNDS_LIBRARY>
 
@@ -14,7 +14,7 @@ export class AudioService {
   gain = 1;
 
   private readonly audioCtx: AudioContext | null = null;
-  private readonly buffers: Map<SoundsEnum, AudioBuffer> = new Map();
+  private readonly buffers: Map<DrumHitsEnum, AudioBuffer> = new Map();
   private readonly gainNode: GainNode | null = null;
 
   constructor() {
@@ -30,7 +30,7 @@ export class AudioService {
   }
 
 
-  public playSound(sound: SoundsEnum, gain: 0 | 1 | 2) {
+  public playSound(sound: DrumHitsEnum, gain: 0 | 1 | 2) {
     if (!this.audioCtx || !this.gainNode) throw Error();
     const source = this.audioCtx.createBufferSource();
     source.buffer = this._getBuffer(sound);
@@ -52,7 +52,7 @@ export class AudioService {
     this.gain = gain;
   }
 
-  private _getBuffer(sound: SoundsEnum): AudioBuffer {
+  private _getBuffer(sound: DrumHitsEnum): AudioBuffer {
     return this.buffers.get(sound) as AudioBuffer;
   }
 

@@ -4,6 +4,7 @@ import {AudioService} from './app/core/services/audio.service';
 
 
 bootstrapApplication(AppComponent, {
+
   providers: [
     {
       provide: AudioService, useClass: AudioService
@@ -11,11 +12,4 @@ bootstrapApplication(AppComponent, {
   ]
 }).then(() => {
   console.log('Bootstrap init!');
-  console.log(window.screen.orientation.type)
-
-  const type = 'landscape-primary';
-  screen.orientation.lock(type).then(() => {
-    console.log('Yes')
-  })
-
 });
