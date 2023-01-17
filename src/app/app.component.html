@@ -116,7 +116,31 @@
       </section>
 
       <section *ngSwitchCase="sectionRoutes.Sounds">
-        Sounds
+        <table class="bank">
+          <tr>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+          </tr>
+        </table>
       </section>
 
       <section *ngSwitchCase="sectionRoutes.Mixer">

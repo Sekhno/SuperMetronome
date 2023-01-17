@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DrumHitsEnum } from '../enums/sounds.enum';
 import { ArrayElement } from '../types/utils';
+import {SoundEnum} from "../types/sound";
 
 const SOUNDS_LIBRARY = [DrumHitsEnum.HiHat, DrumHitsEnum.Snare, DrumHitsEnum.Kick] as const;
 
 type SoundLibraryType = ArrayElement<typeof SOUNDS_LIBRARY>
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +15,11 @@ type SoundLibraryType = ArrayElement<typeof SOUNDS_LIBRARY>
 export class AudioService {
 
   gain = 1;
+  public activeSounds = {
+    [DrumHitsEnum.HiHat]: SoundEnum.HiHat_01,
+    [DrumHitsEnum.Snare]: SoundEnum.Snare_01,
+    [DrumHitsEnum.Kick]:  SoundEnum.Kick_01
+  };
 
   private readonly audioCtx: AudioContext | null = null;
   private readonly buffers: Map<DrumHitsEnum, AudioBuffer> = new Map();
@@ -20,13 +28,7 @@ export class AudioService {
   constructor() {
     this.audioCtx = new AudioContext();
     this.gainNode = this.audioCtx.createGain();
-
-    SOUNDS_LIBRARY.forEach((soundName) => {
-      this._loadAudio(`./assets/audio/DTV1/[DTV1]_${soundName}_01.wav`)
-        .then((buffer) => {
-          this.buffers.set(soundName, buffer)
-        });
-    })
+    this._downloadBuffers();
   }
 
 
@@ -52,8 +54,25 @@ export class AudioService {
     this.gain = gain;
   }
 
+  public setActiveSounds(sounds: Record<DrumHitsEnum, SoundEnum>) {
+    Object.entries(sounds).forEach(([drum, sound]) => {
+      this.activeSounds[drum as DrumHitsEnum] = sound;
+    });
+    this._downloadBuffers();
+  }
+
   private _getBuffer(sound: DrumHitsEnum): AudioBuffer {
     return this.buffers.get(sound) as AudioBuffer;
+  }
+
+  private _downloadBuffers() {
+    SOUNDS_LIBRARY.forEach((soundName) => {
+      const sound = this.activeSounds[soundName];
+      this._loadAudio(`./assets/audio/${sound}.wav`)
+        .then((buffer) => {
+          this.buffers.set(soundName, buffer)
+        });
+    })
   }
 
   private _loadAudio(url: string): Promise<AudioBuffer> {
