@@ -11,6 +11,7 @@ import {DATA_SOUNDS, RecomendationMap, SoundsEnum} from "./core/types/sounds";
 import {BANK_DATA, BankEnum, BankGrids} from "./core/types/bank";
 import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
+import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 
 
 @Component({
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit {
   countPreStart: 1 | 2 | null = null;
   bars = 1;
 
+  sound = SOUND_DATA;
   banks = BANK_DATA;
   rhythms = DATA_GRIDS;
   sounds = DATA_SOUNDS;
@@ -35,6 +37,9 @@ export class AppComponent implements OnInit {
   gridsEnum = GridsEnum;
   activeGrid: GridsEnum = GridsEnum.Beat_01;
   bankEnum = BankEnum;
+  drumHitsEnum = DrumHitsEnum;
+
+
   activeBank = BankEnum.All;
   metronome: Subscription | null = null;
   sections = CONTROL_SECTION_VALUES;
@@ -135,6 +140,11 @@ export class AppComponent implements OnInit {
 
   public setSounds(sound: SoundsEnum) {
     this.activeSound = sound;
+  }
+
+  public setupActiveSound(drum: DrumHitsEnum, sound: SoundEnum) {
+    const options = { [drum]: sound } as Record<DrumHitsEnum, SoundEnum>;
+    this.audio.setActiveSounds(options)
   }
 
   private _autoSetGrid() {
