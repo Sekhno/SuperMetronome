@@ -1,0 +1,39 @@
+$sizes: 3, 4, 5, 6;
+@each $size in $sizes {
+  .fieldset-#{$size} {
+    label:nth-child(#{$size}n){
+      margin-right: 10px;
+
+    }
+
+    label:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.fieldset {
+  input[type=checkbox] {
+    display: none;
+  }
+
+  label {
+    display: inline-block;
+    margin-right: 1px;
+    border-radius: 4px;
+    background: radial-gradient(circle, rgba(255,255,255,.1) -200%, rgba(0,0,0,1) 100%);
+
+    &[data-check="1"] {
+      background: radial-gradient(circle, rgba(255,255,255,1) -200%, rgba(255,255,255,.1) 100%);
+    }
+
+    &[data-check="2"] {
+      //background-color: r
+      background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.2) 100%);
+    }
+
+    &.current {
+      box-shadow: 0 0 2px 1px red;
+    }
+  }
+}
