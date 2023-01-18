@@ -1,8 +1,9 @@
-$main-width: 1200px;
+$main-width: 768px;
 $main-height: 800px;
 
 .main {
-  width: auto; height: auto;
+  width: 100%; height: auto;
+  max-width: $main-width;
   margin: auto;
 
   td {
@@ -189,45 +190,6 @@ $main-height: 800px;
   }
 }
 
-.fieldset {
-  input[type=checkbox] {
-    display: none;
-  }
-
-  label {
-    display: inline-block;
-    width: 40px; height: 40px;
-    margin-right: 1px;
-    border-radius: 4px;
-    background-color: rgba(black, .8);
-
-    &[data-check="1"] {
-      background-color: rgba(white, .4);
-    }
-
-    &[data-check="2"] {
-      background-color: rgba(white, .8);
-    }
-
-    &.current {
-      box-shadow: 0 0 2px 1px red;
-    }
-  }
-}
-
-$sizes: 3, 4, 5, 6;
-@each $size in $sizes {
-  .fieldset-#{$size} {
-    label:nth-child(#{$size}n){
-      margin-right: 1rem;
-
-    }
-
-    label:last-child {
-      margin-right: 0;
-    }
-  }
-}
 
 @keyframes flicker {
   from {

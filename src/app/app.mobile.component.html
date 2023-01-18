@@ -1,0 +1,54 @@
+<div class="preload" (click)="onFullscreen()" *ngIf="isPreload; else container">
+  Please click Enter to Full Screen
+</div>
+
+<ng-template #container>
+  <div class="container">
+    <div class="header">
+
+    </div>
+
+    <div class="footer" [ngSwitch]="curSection">
+      <!-- *** SECTION EDIT *** -->
+      <ng-container *ngSwitchCase="sectionRoutes.Edit" [formGroup]="formGroupGroove">
+        <div class="fieldset" formArrayName="hh" [ngClass]="'fieldset-' + subs">
+          <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
+            <label for="hh_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
+                   [ngStyle]="{width: editNoteWidth, height: editNoteHeight, marginBottom: editNoteMarginBottom}">
+              <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
+            </label>
+
+          </ng-container>
+
+        </div>
+        <div class="fieldset" formArrayName="snare" [ngClass]="'fieldset-' + subs">
+          <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
+            <label for="snare_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
+                   [ngStyle]="{width: editNoteWidth, height: editNoteHeight, marginBottom: editNoteMarginBottom}">
+              <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
+            </label>
+
+          </ng-container>
+        </div>
+        <div class="fieldset" formArrayName="kick" [ngClass]="'fieldset-' + subs">
+          <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
+            <label for="kick_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
+                   [ngStyle]="{width: editNoteWidth, height: editNoteHeight}">
+              <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
+            </label>
+
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+
+
