@@ -5,7 +5,42 @@
 <ng-template #container>
   <div class="container">
     <div class="header">
-
+      <table>
+        <tr>
+          <td rowspan="2" class="column-1">
+            <div class="btn-play">
+              <input type="checkbox" formControlName="playing" id="play">
+              <label for="play"></label>
+            </div>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+<!--          <td></td>-->
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="column-1">
+            <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
+              <button (click)="isShowCountSelect = !isShowCountSelect">count <br> {{ countPreStart }}</button>
+              <div class="select" *ngIf="isShowCountSelect">
+                <div class="option" (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false">1</div>
+                <div class="option" (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false">2</div>
+              </div>
+            </div>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
     </div>
 
     <div class="footer" [ngSwitch]="curSection">
@@ -46,6 +81,8 @@
           </ng-container>
         </div>
       </ng-container>
+
+      <!-- *** SECTION MIXER *** -->
     </div>
   </div>
 </ng-template>
