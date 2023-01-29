@@ -19,7 +19,135 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
 
   .header, .footer {
     height: 50%;
-    border: 1px solid red;
+  }
+
+  .header {
+    table {
+      width: 100%; height: 100%;
+
+      tr {
+        height: 33.33%;
+      }
+
+      td {
+        border: 1px solid red;
+        text-align: center;
+        vertical-align: middle;
+
+        &.column {
+          &-1 {
+            width: 15%;
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    padding-left: 2px;
+  }
+}
+
+.btn {
+  &-play {
+    display: inline-block;
+    border: 1px solid blue;
+    width: 80%; height: 80%;
+    margin: 20% 0;
+
+    input {
+      display: none;
+    }
+
+    input:checked + label {
+      animation-name: initial;
+      animation-duration: initial;
+      animation-timing-function: initial;
+      animation-direction: initial;
+      animation-iteration-count: initial;
+      animation-fill-mode: initial;
+      animation-play-state: initial;
+    }
+
+    label {
+      display: block;
+      width: 100%; height: 100%;
+      //position: relative;
+      background-color: white;
+      clip-path: polygon(0% 0%,  100% 50%, 0% 100%);
+
+      animation-name: flicker;
+      animation-duration: .5s;
+      animation-timing-function: ease-out;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+      animation-fill-mode: none;
+      animation-play-state: running;
+    }
+  }
+
+  &-count {
+    position: relative;
+
+    &.active {
+      button {
+        box-shadow: 0 0 4px white;
+      }
+    }
+
+    button {
+      width: 80%; height: 40px;
+      padding: 8px 12px;
+    }
+
+    .select {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      position: absolute;
+      bottom: -2px; left: 0;
+      transform: translate(0, 100%);
+      border-radius: 8px;
+      background-color: black;
+
+      .option {
+        padding: 8px 0;
+        flex-grow: 1;
+        text-align: center;
+
+      }
+    }
+  }
+}
+
+.bank-mobile {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 8px;
+    //color: rgba(white, .8);
+    text-transform: uppercase;
+    background-color: rgba(black, .6);
+  }
+
+  td {
+    width: 33.33%;
+
+    ul {
+      height: 100%;
+      overflow: auto;
+    }
+    li {
+      padding: 4px;
+      text-align: center;
+
+      &.active {
+        background-color: rgba(white, .1);
+        border-radius: 4px;
+      }
+    }
   }
 }
 
@@ -31,3 +159,13 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
 //    border: 1px solid red;
 //  }
 //}
+
+
+@keyframes flicker {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
