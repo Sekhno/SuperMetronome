@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {AppComponent} from "./app.component";
 import {AudioService} from "./core/services/audio.service";
+import {ControlSectionRoute} from "./core/types/aplication";
 
 @Component({
   standalone: true,
@@ -14,6 +15,8 @@ import {AudioService} from "./core/services/audio.service";
   imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe]
 })
 export class AppMobileComponent extends AppComponent implements AfterContentInit {
+
+  curSection = ControlSectionRoute.Default;
 
   public isPreload = false;
   public editNoteWidth = '40px';
@@ -40,10 +43,6 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
     const height = footerHeight / 3;
     const size = (innerWidth - margin) / 16;
     const marginBottom = (footerHeight - 3 * size) / 2;
-    console.log('> footer', innerWidth, innerHeight)
-    console.log('height: ', height );
-    console.log('size: ',  size);
-    console.log('margin-bottom: ', marginBottom)
     this.editNoteHeight = this.editNoteWidth = `${size - 1}px`;
     this.editNoteMarginBottom = `${marginBottom - 4}px`;
   }

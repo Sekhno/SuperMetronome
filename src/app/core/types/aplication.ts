@@ -2,7 +2,8 @@ export enum ControlSectionRoute {
   Edit = 'edit',
   Patterns = 'patterns',
   Sounds = 'sounds',
-  Mixer = 'mixer'
+  Mixer = 'mixer',
+  Default = 'default'
 }
 
 export const CONTROL_SECTION_VALUES = [
