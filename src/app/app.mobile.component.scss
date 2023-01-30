@@ -1,4 +1,6 @@
 $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
+$btn-height: 40px;
+$btn-padding: 8px 12px;
 
 :host {
   display: table;
@@ -96,8 +98,8 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
     }
 
     button {
-      width: 80%; height: 40px;
-      padding: 8px 12px;
+      width: 80%; height: $btn-height;
+      padding: $btn-padding;
     }
 
     .select {
@@ -118,6 +120,32 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
       }
     }
   }
+
+  &-temp {
+    width: 40%; height: 40px;
+    padding: $btn-padding;
+    font-size: 36px;
+    line-height: 0;
+    vertical-align: middle;
+    background-color: rgba(white, .2);
+
+
+    &:first-child {
+      span {
+        position: relative;
+        top: -2px;
+        font-size: 46px;
+      }
+    }
+
+    &:nth-child(1) {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:nth-child(2) {
+      border-radius: 0 4px 4px 0;
+    }
+  }
 }
 
 .bank-mobile {
@@ -136,7 +164,7 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
     width: 33.33%;
 
     ul {
-      height: 100%;
+      height: calc(100% - 4px);
       overflow: auto;
     }
     li {

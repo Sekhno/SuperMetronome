@@ -13,15 +13,21 @@
               <label for="play"></label>
             </div>
           </td>
-          <td></td>
-          <td></td>
+          <td rowspan="2" class="column-1">
+            <div> {{ bars }} {{ playing ? 'bars' : null }} </div>
+            <div> BPM </div>
+            <div> {{ bpm }} </div>
+          </td>
+          <td rowspan="2" class="column-1">
+            <button class="btn-tap" (click)="tapTempo.tap()">tap</button>
+          </td>
           <td></td>
           <td></td>
         </tr>
         <tr>
 <!--          <td></td>-->
-          <td></td>
-          <td></td>
+<!--          <td></td>-->
+<!--          <td></td>-->
           <td></td>
           <td></td>
         </tr>
@@ -35,7 +41,10 @@
               </div>
             </div>
           </td>
-          <td></td>
+          <td>
+            <button class="btn-temp" (click)="decBPM()"> <span> - </span> </button>
+            <button class="btn-temp" (click)="incBPM()"> <span> + </span> </button>
+          </td>
           <td></td>
           <td></td>
           <td></td>
