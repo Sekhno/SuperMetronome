@@ -1,6 +1,8 @@
 $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
 $btn-height: 40px;
 $btn-padding: 8px 12px;
+$btn-primary-padding: 8px 36px;
+$td-double-padding: 20px;
 
 :host {
   display: table;
@@ -26,6 +28,7 @@ $btn-padding: 8px 12px;
   .header {
     table {
       width: 100%; height: 100%;
+      border-collapse: collapse;
 
       tr {
         height: 33.33%;
@@ -38,7 +41,7 @@ $btn-padding: 8px 12px;
 
         &.column {
           &-1 {
-            width: 15%;
+            width: 20%;
           }
         }
       }
@@ -54,7 +57,7 @@ $btn-padding: 8px 12px;
   &-play {
     display: inline-block;
     border: 1px solid blue;
-    width: 80%; height: 80%;
+    width: calc(100% - $td-double-padding); height: calc(100% - $td-double-padding);
     margin: 20% 0;
 
     input {
@@ -98,7 +101,7 @@ $btn-padding: 8px 12px;
     }
 
     button {
-      width: 80%; height: $btn-height;
+      width: calc(100% - $td-double-padding); height: $btn-height;
       padding: $btn-padding;
     }
 
@@ -122,12 +125,23 @@ $btn-padding: 8px 12px;
   }
 
   &-temp {
+    position: relative;
     width: 40%; height: 40px;
     padding: $btn-padding;
     font-size: 36px;
     line-height: 0;
     vertical-align: middle;
     background-color: rgba(white, .2);
+
+    &:before {
+      content: "";
+      clear: both;
+      position: absolute;
+      top: 25%;
+      display: block;
+      width: 1px; height: 50%;
+      background: rgba(white, .6);
+    }
 
 
     &:first-child {
@@ -140,11 +154,64 @@ $btn-padding: 8px 12px;
 
     &:nth-child(1) {
       border-radius: 4px 0 0 4px;
+
+      &:before {
+        right: 0;
+      }
     }
 
     &:nth-child(2) {
       border-radius: 0 4px 4px 0;
+
+      &:before {
+        left: 0;
+      }
     }
+  }
+
+  &-tap {
+    width: calc(100% - $td-double-padding); height: calc(100% - $td-double-padding);
+  }
+
+  &-progTempo, &-beatHeader {
+    width: calc(100% - $td-double-padding); height: $btn-height;
+    padding: $btn-padding;
+  }
+
+  &-primary {
+    width: auto; height: $btn-height;
+    margin-right: 20px; padding: $btn-primary-padding;
+  }
+}
+
+.range {
+  &-bpm, &-swing {
+    position: relative;
+
+
+    span {
+      position: absolute;
+      left: 1px; bottom: 4px;
+      display: block;
+      width: 100%; height: 4px;
+      background-color: white;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+  &-bpm {
+    display: block;
+    width: calc(100% - $td-double-padding);
+    margin: auto;
+  }
+
+  &-swing {
+    display: inline-block;
+    width: 40%;
   }
 }
 

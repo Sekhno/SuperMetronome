@@ -21,15 +21,30 @@
           <td rowspan="2" class="column-1">
             <button class="btn-tap" (click)="tapTempo.tap()">tap</button>
           </td>
-          <td></td>
-          <td></td>
+          <td class="column-1">
+            <button class="btn-progTempo"> prog tempo </button>
+          </td>
+          <td>
+            <div> Beats </div>
+            <div>
+              <button (click)="decBeats()"> - </button>
+              <span> {{ beats }} </span>
+              <button (click)="incBeats()"> + </button>
+            </div>
+          </td>
         </tr>
         <tr>
-<!--          <td></td>-->
-<!--          <td></td>-->
-<!--          <td></td>-->
-          <td></td>
-          <td></td>
+          <td class="column-1">
+            <button class="btn-beatHeader"> beat hider </button>
+          </td>
+          <td>
+            <div> Subs </div>
+            <div>
+              <button (click)="decSubs()"> - </button>
+              <span> {{ subs }} </span>
+              <button (click)="incSubs()"> + </button>
+            </div>
+          </td>
         </tr>
         <tr>
           <td class="column-1">
@@ -45,15 +60,29 @@
             <button class="btn-temp" (click)="decBPM()"> <span> - </span> </button>
             <button class="btn-temp" (click)="incBPM()"> <span> + </span> </button>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td colspan="3">
+            <label class="range-bpm">
+              <input  type="range" min="40" max="250" formControlName="bpm">
+              <span [ngStyle]="{ width: (((bpm - 40) * 100) / 210) + '%' }"></span>
+            </label>
+          </td>
         </tr>
         <tr>
-          <td colspan="5">
-            <button>Groove</button>
-            <button>Mix</button>
-            <button>SoundSet</button>
+          <td colspan="5" >
+            <button class="btn-primary">Groove</button>
+            <button class="btn-primary">Mix</button>
+            <button class="btn-primary">SoundSet</button>
+            <label class="range-swing">
+              <input type="range" min="0" max="100" formControlName="swing">
+              <span [ngStyle]="{ width: swing + '%' }"></span>
+            </label>
+<!--            <div>-->
+<!--              <div class="label">swing {{ swing }} %</div>-->
+<!--              <label class="swing-range">-->
+<!--                <input type="range" min="0" max="100" formControlName="swing">-->
+<!--                <span [ngStyle]="{ width: swing + '%' }"></span>-->
+<!--              </label>-->
+<!--            </div>-->
           </td>
         </tr>
       </table>
