@@ -1,5 +1,6 @@
 $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
 $btn-height: 40px;
+$btn-secondary-height: 30px;
 $btn-padding: 8px 12px;
 $btn-primary-padding: 8px 36px;
 $td-double-padding: 20px;
@@ -21,21 +22,24 @@ $td-double-padding: 20px;
   height: 100%;
   background: $main-background;
 
-  .header, .footer {
-    height: 50%;
-  }
+  //.header, .footer {
+  //  height: 50%;
+  //}
 
   .header {
+    height: 60%;
+    padding-top: 10px;
+
     table {
       width: 100%; height: 100%;
       border-collapse: collapse;
 
       tr {
-        height: 33.33%;
+        height: 25%;
       }
 
       td {
-        border: 1px solid red;
+        //border: 1px solid beige;
         text-align: center;
         vertical-align: middle;
 
@@ -49,6 +53,7 @@ $td-double-padding: 20px;
   }
 
   .footer {
+    height: 40%;
     padding-left: 2px;
   }
 }
@@ -56,7 +61,6 @@ $td-double-padding: 20px;
 .btn {
   &-play {
     display: inline-block;
-    border: 1px solid blue;
     width: calc(100% - $td-double-padding); height: calc(100% - $td-double-padding);
     margin: 20% 0;
 
@@ -173,20 +177,25 @@ $td-double-padding: 20px;
     width: calc(100% - $td-double-padding); height: calc(100% - $td-double-padding);
   }
 
-  &-progTempo, &-beatHeader {
+  &-primary {
     width: calc(100% - $td-double-padding); height: $btn-height;
-    padding: $btn-padding;
+
+    &.active {
+      color: red;
+    }
   }
 
-  &-primary {
-    width: auto; height: $btn-height;
-    margin-right: 20px; padding: $btn-primary-padding;
+  &-secondary {
+    width: $btn-secondary-height; height: $btn-secondary-height;
   }
 }
 
 .range {
   &-bpm, &-swing {
     position: relative;
+    display: block;
+    margin: auto;
+    width: calc(100% - $td-double-padding);
 
 
     span {
@@ -202,16 +211,6 @@ $td-double-padding: 20px;
     input {
       width: 100%;
     }
-  }
-  &-bpm {
-    display: block;
-    width: calc(100% - $td-double-padding);
-    margin: auto;
-  }
-
-  &-swing {
-    display: inline-block;
-    width: 40%;
   }
 }
 
@@ -243,6 +242,16 @@ $td-double-padding: 20px;
         border-radius: 4px;
       }
     }
+  }
+}
+
+.beats, .subs {
+  position: relative;
+
+  .title {
+    padding-bottom: 4px;
+    font-size: 12px;
+    //transform: translate(-50%, -50%);
   }
 }
 

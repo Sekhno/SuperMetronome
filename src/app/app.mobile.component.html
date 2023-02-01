@@ -22,27 +22,27 @@
             <button class="btn-tap" (click)="tapTempo.tap()">tap</button>
           </td>
           <td class="column-1">
-            <button class="btn-progTempo"> prog tempo </button>
+            <button class="btn-primary"> prog tempo </button>
           </td>
-          <td>
-            <div> Beats </div>
+          <td class="column-1 beats">
+            <div class="title"> Beats </div>
             <div>
-              <button (click)="decBeats()"> - </button>
+              <button class="btn-secondary" (click)="decBeats()"> - </button>
               <span> {{ beats }} </span>
-              <button (click)="incBeats()"> + </button>
+              <button class="btn-secondary" (click)="incBeats()"> + </button>
             </div>
           </td>
         </tr>
         <tr>
           <td class="column-1">
-            <button class="btn-beatHeader"> beat hider </button>
+            <button class="btn-primary"> beat hider </button>
           </td>
-          <td>
-            <div> Subs </div>
+          <td class="column-1 subs">
+            <div class="title"> Subs </div>
             <div>
-              <button (click)="decSubs()"> - </button>
+              <button class="btn-secondary" (click)="decSubs()"> - </button>
               <span> {{ subs }} </span>
-              <button (click)="incSubs()"> + </button>
+              <button class="btn-secondary" (click)="incSubs()"> + </button>
             </div>
           </td>
         </tr>
@@ -68,10 +68,28 @@
           </td>
         </tr>
         <tr>
-          <td colspan="5" >
-            <button class="btn-primary">Groove</button>
-            <button class="btn-primary">Mix</button>
-            <button class="btn-primary">SoundSet</button>
+          <td>
+            <button class="btn-primary"
+                    [ngClass]="{active: curSection === sectionRoutes.Edit}"
+                    (click)="setCurSection(sectionRoutes.Edit)"
+            >Groove</button>
+          </td>
+          <td>
+            <button class="btn-primary"
+                    [ngClass]="{active: curSection === sectionRoutes.Mixer}"
+                    (click)="setCurSection(sectionRoutes.Mixer)"
+            >Mix</button>
+          </td>
+          <td>
+            <button class="btn-primary"
+                    [ngClass]="{active: curSection === sectionRoutes.Sounds}"
+                    (click)="setCurSection(sectionRoutes.Sounds)"
+            >SoundSet</button>
+          </td>
+          <td colspan="2" >
+
+
+
             <label class="range-swing">
               <input type="range" min="0" max="100" formControlName="swing">
               <span [ngStyle]="{ width: swing + '%' }"></span>
