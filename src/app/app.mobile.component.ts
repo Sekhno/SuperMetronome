@@ -35,11 +35,20 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
     }
   }
 
+  public setCurSection(section: ControlSectionRoute) {
+    if (this.curSection === section) {
+      this.curSection = ControlSectionRoute.Default;
+    }
+    else {
+      this.curSection = section;
+    }
+  }
+
   private _calcEditNoteSize() {
     const beats = 4;
     const subs = 4;
     const margin = (beats - 1) * 10;
-    const footerHeight = innerHeight / 2;
+    const footerHeight = 0.4 * innerHeight;
     const height = footerHeight / 3;
     const size = (innerWidth - margin) / 16;
     const marginBottom = (footerHeight - 3 * size) / 2;
