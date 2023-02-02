@@ -13,7 +13,7 @@
               <label for="play"></label>
             </div>
           </td>
-          <td rowspan="2" class="column-1">
+          <td rowspan="2" class="column-1 wrapper-bpm">
             <div> {{ bars }} {{ playing ? 'bars' : null }} </div>
             <div> BPM </div>
             <div> {{ bpm }} </div>
@@ -49,7 +49,7 @@
         <tr>
           <td class="column-1">
             <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
-              <button (click)="isShowCountSelect = !isShowCountSelect">count <br> {{ countPreStart }}</button>
+              <button (click)="isShowCountSelect = !isShowCountSelect">count {{ countPreStart }}</button>
               <div class="select" *ngIf="isShowCountSelect">
                 <div class="option" (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false">1</div>
                 <div class="option" (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false">2</div>
@@ -75,7 +75,7 @@
             >Groove</button>
           </td>
           <td>
-            <button class="btn-primary"
+            <button class="btn-primary" disabled
                     [ngClass]="{active: curSection === sectionRoutes.Mixer}"
                     (click)="setCurSection(sectionRoutes.Mixer)"
             >Mix</button>
@@ -178,6 +178,35 @@
       </ng-container>
 
       <!-- *** SECTION MIXER *** -->
+
+      <!-- ***  SECTION SOUND ***-->
+      <ng-container *ngSwitchCase="sectionRoutes.Sounds">
+        <table class="bank-mobile">
+          <tr>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let s of sound"
+                    (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
+                > {{ s.value }} </li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+      </ng-container>
     </div>
   </div>
 </ng-template>

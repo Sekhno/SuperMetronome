@@ -1,5 +1,5 @@
 $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
-$btn-height: 40px;
+$btn-height: 36px;
 $btn-secondary-height: 30px;
 $btn-padding: 8px 12px;
 $btn-primary-padding: 8px 36px;
@@ -181,7 +181,8 @@ $td-double-padding: 20px;
     width: calc(100% - $td-double-padding); height: $btn-height;
 
     &.active {
-      color: red;
+      box-shadow: 0 0 2px white;
+      color: white;
     }
   }
 
@@ -252,6 +253,16 @@ $td-double-padding: 20px;
     padding-bottom: 4px;
     font-size: 12px;
     //transform: translate(-50%, -50%);
+  }
+}
+
+.wrapper {
+  &-bpm {
+    > div {
+      &:nth-child(3) {
+        font-size: 60px;
+      }
+    }
   }
 }
 

@@ -25,6 +25,15 @@ button {
   border: none;
   border-radius: 4px;
   white-space: nowrap;
+  transition: background-color .3s;
+
+  &[disabled] {
+    opacity: .5;
+  }
+
+  &:active {
+    background-color: rgba(white, .4);
+  }
 }
 
 
