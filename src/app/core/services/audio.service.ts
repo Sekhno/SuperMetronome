@@ -14,7 +14,7 @@ type SoundLibraryType = ArrayElement<typeof SOUNDS_LIBRARY>
 })
 export class AudioService {
 
-  gain = 1;
+  private gain= 1;
   public activeSounds = {
     [DrumHitsEnum.HiHat]: SoundEnum.HiHat_01,
     [DrumHitsEnum.Snare]: SoundEnum.Snare_01,
@@ -24,13 +24,6 @@ export class AudioService {
   private readonly audioCtx: AudioContext | null = null;
   private readonly buffers: Map<DrumHitsEnum, AudioBuffer> = new Map();
   private readonly gainNode: GainNode | null = null;
-
-  constructor() {
-    this.audioCtx = new AudioContext();
-    this.gainNode = this.audioCtx.createGain();
-    this._downloadBuffers();
-  }
-
 
   public playSound(sound: DrumHitsEnum, gain: 0 | 1 | 2) {
     if (!this.audioCtx || !this.gainNode) throw Error();
@@ -90,5 +83,12 @@ export class AudioService {
       request.send();
     })
   }
+
+  constructor() {
+    this.audioCtx = new AudioContext();
+    this.gainNode = this.audioCtx.createGain();
+    this._downloadBuffers();
+  }
+
 
 }

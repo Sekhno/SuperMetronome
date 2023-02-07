@@ -12,6 +12,7 @@ import {BANK_DATA, BankEnum, BankGrids} from "./core/types/bank";
 import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
+import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
 
 
 @Component({
@@ -20,7 +21,7 @@ import {SOUND_DATA, SoundEnum} from "./core/types/sound";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe]
+  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective]
 })
 export class AppComponent implements OnInit {
 
@@ -46,6 +47,8 @@ export class AppComponent implements OnInit {
   curSection = ControlSectionRoute.Edit;
   sectionRoutes = ControlSectionRoute;
   curBit = -1;
+
+  curActiveSounds = this.audio.activeSounds;
 
   formGroupControls = new FormGroup<IFormGroupControl>({
     playing: new FormControl(false, { nonNullable: true }),

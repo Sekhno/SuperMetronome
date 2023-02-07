@@ -27,9 +27,9 @@
           <td class="column-1 beats">
             <div class="title"> Beats </div>
             <div>
-              <button class="btn-secondary" (click)="decBeats()"> - </button>
+              <button class="btn-secondary" (click)="decBeats()" disabled> - </button>
               <span> {{ beats }} </span>
-              <button class="btn-secondary" (click)="incBeats()"> + </button>
+              <button class="btn-secondary" (click)="incBeats()" disabled> + </button>
             </div>
           </td>
         </tr>
@@ -40,9 +40,9 @@
           <td class="column-1 subs">
             <div class="title"> Subs </div>
             <div>
-              <button class="btn-secondary" (click)="decSubs()"> - </button>
+              <button class="btn-secondary" (click)="decSubs()" disabled> - </button>
               <span> {{ subs }} </span>
-              <button class="btn-secondary" (click)="incSubs()"> + </button>
+              <button class="btn-secondary" (click)="incSubs()" disabled> + </button>
             </div>
           </td>
         </tr>
@@ -114,21 +114,21 @@
           <tbody>
           <tr>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
                     [ngClass]="{ active: activeGrid === r.key }"
                 > {{ r.value }} </li>
               </ul>
             </td>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
                     [ngClass]="{ active: activeSound === s.key }"
                 > {{ s.value }} </li>
               </ul>
             </td>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let b of banks" (click)="setBank(b.key)"
                     [ngClass]="{ active: activeBank === b.key }"
                 > {{ b.value }} </li>
@@ -186,6 +186,7 @@
             <td>
               <ul>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.HH === s.key}"
                     (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
                 > {{ s.value }} </li>
               </ul>
@@ -193,6 +194,7 @@
             <td>
               <ul>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
                     (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
                 > {{ s.value }} </li>
               </ul>
@@ -200,6 +202,7 @@
             <td>
               <ul>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.KICK === s.key }"
                     (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
                 > {{ s.value }} </li>
               </ul>
