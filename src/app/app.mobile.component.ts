@@ -5,6 +5,7 @@ import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {AppComponent} from "./app.component";
 import {AudioService} from "./core/services/audio.service";
 import {ControlSectionRoute} from "./core/types/aplication";
+import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ import {ControlSectionRoute} from "./core/types/aplication";
   templateUrl: './app.mobile.component.html',
   styleUrls: ['./app.mobile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe]
+  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective]
 })
 export class AppMobileComponent extends AppComponent implements AfterContentInit {
 
