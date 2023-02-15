@@ -1,4 +1,13 @@
-import {AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from "@angular/core";
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from "@angular/core";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
@@ -67,5 +76,4 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
   ngAfterContentInit(): void {
     this._calcEditNoteSize();
   }
-
 }

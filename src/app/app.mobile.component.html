@@ -114,21 +114,21 @@
           <tbody>
           <tr>
             <td>
-              <ul appAutoScroll>
+              <ul appAutoScroll [activeItem]="activeGrid">
                 <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
                     [ngClass]="{ active: activeGrid === r.key }"
                 > {{ r.value }} </li>
               </ul>
             </td>
             <td>
-              <ul appAutoScroll>
+              <ul appAutoScroll [activeItem]="activeSound">
                 <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
                     [ngClass]="{ active: activeSound === s.key }"
                 > {{ s.value }} </li>
               </ul>
             </td>
             <td>
-              <ul appAutoScroll>
+              <ul appAutoScroll [activeItem]="activeBank">
                 <li *ngFor="let b of banks" (click)="setBank(b.key)"
                     [ngClass]="{ active: activeBank === b.key }"
                 > {{ b.value }} </li>
