@@ -34,12 +34,13 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
   public editNoteMarginBottom = '4px';
 
   public onFullscreen() {
+    this.isPreload = false;
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().then(() => {
         console.log('Full screen');
         screen.orientation.lock('landscape').then(() => {
           alert('landscape');
-        })
+        }).catch((e) => alert(JSON.stringify(e)))
         // screen.lockOrientation('landscape');
       })
     }
