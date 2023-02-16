@@ -28,7 +28,7 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
 
   curSection = ControlSectionRoute.Default;
 
-  public isPreload = false;
+  public isPreload = true;
   public editNoteWidth = '40px';
   public editNoteHeight = '40px';
   public editNoteMarginBottom = '4px';
@@ -37,9 +37,9 @@ export class AppMobileComponent extends AppComponent implements AfterContentInit
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().then(() => {
         console.log('Full screen');
-        // screen.orientation.lock('landscape').then(() => {
-        //   console.log('landscape');
-        // })
+        screen.orientation.lock('landscape').then(() => {
+          alert('landscape');
+        })
         // screen.lockOrientation('landscape');
       })
     }
