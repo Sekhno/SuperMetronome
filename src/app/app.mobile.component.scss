@@ -232,7 +232,10 @@ $td-double-padding: 20px;
 
     ul {
       height: calc(100% - 4px);
+      //padding: 50% 0;
       overflow: auto;
+
+
     }
     li {
       padding: 4px;
@@ -241,6 +244,14 @@ $td-double-padding: 20px;
       &.active {
         background-color: rgba(white, .1);
         border-radius: 4px;
+      }
+
+      &:first-child {
+        margin-top: 75px;
+      }
+
+      &:last-child {
+        margin-bottom: 75px;
       }
     }
   }
