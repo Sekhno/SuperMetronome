@@ -119,22 +119,25 @@
         <table class="bank">
           <tr>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.HH === s.key}"
                     (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
                 > {{ s.value }} </li>
               </ul>
             </td>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
                     (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
                 > {{ s.value }} </li>
               </ul>
             </td>
             <td>
-              <ul>
+              <ul appAutoScroll>
                 <li *ngFor="let s of sound"
+                    [ngClass]="{ active: curActiveSounds.KICK === s.key }"
                     (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
                 > {{ s.value }} </li>
               </ul>
@@ -176,21 +179,21 @@
         <tbody>
         <tr>
           <td>
-            <ul>
+            <ul appAutoScroll [activeItem]="activeBank">
               <li *ngFor="let b of banks" (click)="setBank(b.key)"
                   [ngClass]="{ active: activeBank === b.key }"
               > {{ b.value }} </li>
             </ul>
           </td>
           <td>
-            <ul>
+            <ul appAutoScroll [activeItem]="activeGrid">
               <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
                   [ngClass]="{ active: activeGrid === r.key }"
               > {{ r.value }} </li>
             </ul>
           </td>
           <td>
-            <ul>
+            <ul appAutoScroll [activeItem]="activeSound">
               <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
                   [ngClass]="{ active: activeSound === s.key }"
               > {{ s.value }} </li>

@@ -30,7 +30,7 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
     width: 33.33%;
 
     ul {
-      height: 120px;
+      height: 150px;
       overflow: auto;
     }
     li {
@@ -39,6 +39,14 @@ $main-background: #000 radial-gradient(ellipse at top, #18789b 0,#276585 70%);
       &.active {
         background-color: rgba(white, .1);
         border-radius: 4px;
+      }
+
+      &:first-child {
+        margin-top: 75px;
+      }
+
+      &:last-child {
+        margin-bottom: 75px;
       }
     }
   }
