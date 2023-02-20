@@ -3,9 +3,9 @@ import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/f
 import {CommonModule} from "@angular/common";
 import {Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
-import {DrumHitsEnum} from "./core/enums/sounds.enum";
+import {DrumHitsEnum, SimpleEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
-import {NotesType, NoteType, GridsEnum, Grids, DATA_GRIDS} from "./core/types/notes";
+import {DATA_GRIDS, Grids, GridsEnum, NotesType, NoteType} from "./core/types/notes";
 import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
 import {DATA_SOUNDS, RecomendationMap, SoundsEnum} from "./core/types/sounds";
 import {BANK_DATA, BankEnum, BankGrids} from "./core/types/bank";
@@ -13,6 +13,7 @@ import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
+import {finalize, take} from "rxjs/operators";
 
 
 @Component({
@@ -167,8 +168,31 @@ export class AppComponent implements OnInit {
     const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
     if (!bpm || !beats || !subs) throw Error();
+    const fullPeriodOrScheduler = ((60 / bpm) * 1000 );
+    const periodOrScheduler = fullPeriodOrScheduler / beats;
+
+    if (this.countPreStart) {
+      const counts = this.countPreStart * beats + 1;
+      timer(dueTime, fullPeriodOrScheduler)
+        .pipe(take(counts), finalize(() => {
+          this._onMetronome(periodOrScheduler, dueTime)
+        }))
+        .subscribe((count) => {
+          if (counts !== count + 1) {
+            this.audio.playSound(SimpleEnum.Count, 2)
+          }
+        })
+    }
+    else {
+      this._onMetronome(periodOrScheduler, dueTime)
+    }
+  }
+
+  private _onMetronome(periodOrScheduler: number, dueTime = 0) {
+    const { bpm } = this.formGroupControls.value;
+    const { beats, subs } = this.formGroupBeats.value;
+    if (!bpm || !beats || !subs) throw Error();
     const { hh, snare, kick } = this.formGroupGroove.controls;
-    const periodOrScheduler = ((60 / bpm) * 1000 ) / beats;
     const length = beats * subs - 2;
 
     this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
@@ -185,6 +209,9 @@ export class AppComponent implements OnInit {
       this.cdr.markForCheck();
     });
   }
+
+
+
 
   private _stop() {
     this.metronome?.unsubscribe();

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { DrumHitsEnum } from '../enums/sounds.enum';
-import { ArrayElement } from '../types/utils';
+import {Injectable} from '@angular/core';
+import {DrumHitsEnum, SimpleEnum} from '../enums/sounds.enum';
+import {ArrayElement} from '../types/utils';
 import {SoundEnum} from "../types/sound";
 
 const SOUNDS_LIBRARY = [DrumHitsEnum.HiHat, DrumHitsEnum.Snare, DrumHitsEnum.Kick] as const;
@@ -22,10 +22,10 @@ export class AudioService {
   };
 
   private readonly audioCtx: AudioContext | null = null;
-  private readonly buffers: Map<DrumHitsEnum, AudioBuffer> = new Map();
+  private readonly buffers: Map<DrumHitsEnum | SimpleEnum, AudioBuffer> = new Map();
   private readonly gainNode: GainNode | null = null;
 
-  public playSound(sound: DrumHitsEnum, gain: 0 | 1 | 2) {
+  public playSound(sound: DrumHitsEnum | SimpleEnum, gain: 0 | 1 | 2) {
     if (!this.audioCtx || !this.gainNode) throw Error();
     const source = this.audioCtx.createBufferSource();
     source.buffer = this._getBuffer(sound);
@@ -38,6 +38,10 @@ export class AudioService {
       source.buffer = source.onended = null;
       source.disconnect();
     }
+
+  }
+
+  public playCount() {
 
   }
 
@@ -54,7 +58,7 @@ export class AudioService {
     this._downloadBuffers();
   }
 
-  private _getBuffer(sound: DrumHitsEnum): AudioBuffer {
+  private _getBuffer(sound: DrumHitsEnum | SimpleEnum): AudioBuffer {
     return this.buffers.get(sound) as AudioBuffer;
   }
 
@@ -65,7 +69,12 @@ export class AudioService {
         .then((buffer) => {
           this.buffers.set(soundName, buffer)
         });
-    })
+    });
+
+    this._loadAudio(`./assets/audio/${SoundEnum.Snare_06}.wav`)
+      .then((buffer) => {
+        this.buffers.set(SimpleEnum.Count, buffer);
+      })
   }
 
   private _loadAudio(url: string): Promise<AudioBuffer> {
