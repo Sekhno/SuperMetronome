@@ -43,20 +43,36 @@ export class AutoScrollDirective implements OnChanges, AfterContentInit {
     const positionTop = activeRect.top - mainRect.top;
     const newOffsetTop = activeEl.offsetTop - 3;
 
-    if (isFirstContentInit) {
-      this.curOffsetTop = newOffsetTop;
-      mainEl.scroll({top: newOffsetTop})
-    } else {
-      animate({
-        duration: 500,
-        timing: linearAnimation,
-        draw: (progress) => {
-          const diff = newOffsetTop - this.curOffsetTop;
-          mainEl.scroll({top: this.curOffsetTop + (diff * progress)});
-          if (progress === 1) this.curOffsetTop = newOffsetTop;
-        }
-      })
-    }
+    const offsetTop = activeEl.offsetTop;
+    const scrollTop = mainEl.scrollTop;
+    const elementHeight = activeEl.offsetHeight;
+    const containerHeight = mainEl.offsetHeight;
+    console.log('offsetTop: ' + offsetTop);
+    console.log('scrollTop: ' + scrollTop);
+    console.log('elementHeight: ' + elementHeight);
+    console.log('containerHeight: ' + containerHeight)
+    // if (offsetTop < scrollTop || offsetTop + elementHeight > scrollTop + containerHeight) {
+    //   console.log('Result: ' + (offsetTop - (containerHeight - elementHeight) / 2));
+    // }
+
+    const result = (offsetTop - (containerHeight - elementHeight) / 2);
+    console.log('Result: ' + result);
+    mainEl.scroll({top: result});
+
+    // if (isFirstContentInit) {
+    //   this.curOffsetTop = newOffsetTop;
+    //   mainEl.scroll({top: newOffsetTop})
+    // } else {
+    //   animate({
+    //     duration: 500,
+    //     timing: linearAnimation,
+    //     draw: (progress) => {
+    //       const diff = newOffsetTop - this.curOffsetTop;
+    //       mainEl.scroll({top: this.curOffsetTop + (diff * progress)});
+    //       if (progress === 1) this.curOffsetTop = newOffsetTop;
+    //     }
+    //   })
+    // }
   }
 
   constructor(private el: ElementRef) {
