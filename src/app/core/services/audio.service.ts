@@ -38,11 +38,6 @@ export class AudioService {
       source.buffer = source.onended = null;
       source.disconnect();
     }
-
-  }
-
-  public playCount() {
-
   }
 
   public setVolume(gain: number) {
@@ -98,6 +93,4 @@ export class AudioService {
     this.gainNode = this.audioCtx.createGain();
     this._downloadBuffers();
   }
-
-
 }
