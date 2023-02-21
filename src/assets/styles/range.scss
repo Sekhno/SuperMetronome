@@ -26,7 +26,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -15px; /* Centers thumb on the track */
+  margin-top: -14px; /* Centers thumb on the track */
   //box-shadow: -200px 0 0 200px white;
 
   /*custom styles*/

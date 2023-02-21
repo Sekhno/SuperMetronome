@@ -210,9 +210,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-
-
-
   private _stop() {
     this.metronome?.unsubscribe();
     this._resetBars();

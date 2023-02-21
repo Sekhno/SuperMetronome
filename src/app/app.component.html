@@ -62,7 +62,7 @@
   <tr>
     <td>
       <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
-        <button (click)="isShowCountSelect = !isShowCountSelect">count <br> {{ countPreStart }}</button>
+        <button [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</button>
         <div class="select" *ngIf="isShowCountSelect">
           <div class="option"
                (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
