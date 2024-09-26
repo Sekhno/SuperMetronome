@@ -37,7 +37,7 @@
 
     <td rowspan="3">
       <div class="label">volume</div>
-      <label class="volume-range">
+      <label class="range-volume">
         <input type="range" min="0" max="300" formControlName="volume">
         <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
       </label>
@@ -53,7 +53,7 @@
     </td>
     <td>
       <div class="label">swing {{ swing }} %</div>
-      <label class="swing-range">
+      <label class="range-swing">
         <input type="range" min="0" max="100" formControlName="swing">
         <span [ngStyle]="{ width: swing + '%' }"></span>
       </label>
@@ -74,11 +74,11 @@
       </div>
     </td>
     <td>
-      <button (click)="decBPM()"> - </button>
-      <button (click)="incBPM()"> + </button>
+      <button class="btn-temp" (click)="decBPM()"> - </button>
+      <button class="btn-temp" (click)="incBPM()"> + </button>
     </td>
     <td colspan="3">
-      <label class="temp-range">
+      <label class="range-temp">
         <input  type="range" min="40" max="250" formControlName="bpm">
         <span [ngStyle]="{ width: (((bpm - 40) * 100) / 210) + '%' }"></span>
       </label>
