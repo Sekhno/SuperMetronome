@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
   bankEnum = BankEnum;
   drumHitsEnum = DrumHitsEnum;
 
-
   activeBank = BankEnum.All;
   metronome: Subscription | null = null;
   sections = CONTROL_SECTION_VALUES;
