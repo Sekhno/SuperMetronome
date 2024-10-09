@@ -1,7 +1,8 @@
 @import "variables";
+
 html {
   height: 100%;
-  font-family: fantasy;
+  font-family: $main-font-family;
 }
 
 body {
@@ -29,7 +30,7 @@ button {
   border-radius: 4px;
   white-space: nowrap;
   transition: background-color .3s;
-  font-family: fantasy;
+  font-family: $main-font-family;
 
   &[disabled] {
     opacity: .5;
@@ -38,6 +39,10 @@ button {
   &:active {
     background-color: rgba(white, .4);
   }
+}
+
+.w-full {
+  width: 100%;
 }
 
 

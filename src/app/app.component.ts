@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {CommonModule} from "@angular/common";
+import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
 import {DrumHitsEnum, SimpleEnum} from "./core/enums/sounds.enum";
@@ -22,7 +22,7 @@ import {finalize, take} from "rxjs/operators";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective]
+  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage]
 })
 export class AppComponent implements OnInit {
 
@@ -148,6 +148,13 @@ export class AppComponent implements OnInit {
   public setupActiveSound(drum: DrumHitsEnum, sound: SoundEnum) {
     const options = { [drum]: sound } as Record<DrumHitsEnum, SoundEnum>;
     this.audio.setActiveSounds(options)
+  }
+
+  public onClickFormGroupGrooveLabel(e: Event, c: AbstractControl, v: number) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    c.patchValue(v === 2 ? 0 : ++v)
   }
 
   private _autoSetGrid() {
