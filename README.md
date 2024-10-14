@@ -1,3 +1,3 @@
 # SuperMetronome
 
-[Click here]( https://mastermetronome.com/ ) to start.
+[Click here]( https://mastermetronome.web.app/ ) to start.
