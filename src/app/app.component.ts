@@ -13,7 +13,7 @@ import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
-import {finalize, take} from "rxjs/operators";
+import {debounceTime, finalize, take} from "rxjs/operators";
 
 
 @Component({
@@ -231,13 +231,16 @@ export class AppComponent implements OnInit {
   }
 
   private _onSubscribe() {
-    this.formGroupControls.valueChanges.subscribe(({ bpm, playing, volume }) => {
+    this.formGroupControls.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(({ bpm, playing, volume }) => {
       this._stop();
       playing && this._play();
     });
-    this.formGroupControls.controls.volume.valueChanges.subscribe((gain) => {
-      this.audio.setVolume(0.01*gain);
-    })
+    this.formGroupControls.controls.volume.valueChanges
+      .subscribe((gain) => {
+        this.audio.setVolume(0.01*gain);
+      })
 
     this.formGroupBeats.valueChanges.subscribe(({ beats, subs }) => {
       if (!beats || !subs) throw Error();
