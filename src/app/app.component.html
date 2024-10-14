@@ -4,7 +4,7 @@
       <div class="btn-play">
         <input type="checkbox" formControlName="playing" id="play">
         <label for="play">
-          <img ngSrc="assets/images/icons/play_arrow_24dp_E8EAED.svg" width="100" height="100" alt="play">
+          <img ngSrc="assets/images/icons/play_arrow_24dp_E8EAED.svg" width="100" height="100" alt="play" priority>
         </label>
       </div>
     </td>
@@ -56,12 +56,12 @@
   </tr>
   <tr>
     <td>
-      <button class="w-full">progressive tempo</button>
+      <button class="w-full btn-default">progressive tempo</button>
     </td>
     <td>
-      <button>beat hider</button>
+      <button class="w-full btn-default">beat hider</button>
     </td>
-    <td>
+    <td class="module-swing">
       <div class="label">swing {{ swing }} %</div>
       <label class="range-swing">
         <input type="range" min="0" max="100" formControlName="swing">
