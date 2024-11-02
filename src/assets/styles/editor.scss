@@ -62,5 +62,17 @@ $sizes: 3, 4, 5, 6;
         width: 22px; height: 22px;
       }
     }
+
+    &-30 {
+      label {
+        width: 20px; height: 20px;
+      }
+    }
+
+    &-36 {
+      label {
+        width: 18px; height: 18px;
+      }
+    }
   }
 }
