@@ -29,19 +29,32 @@ $sizes: 3, 4, 5, 6;
     }
 
     &[data-check="2"] {
-      //background-color: r
       background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.2) 100%);
     }
 
     &.current {
       box-shadow: 0 0 2px 1px red;
     }
+
+    //$steps: 100;
+    //
+    //@for $i from 0 through $steps {
+    //  &.swing_#{$i} {
+    //    width: calc(40px + (#{$i}/$steps/2 * 40px)) !important;
+    //  }
+    //}
   }
 
   &.length {
     &-16 {
       label {
         width: 40px; height: 40px;
+      }
+    }
+
+    &-18 {
+      label {
+        width: 34px; height: 34px;
       }
     }
 
@@ -57,9 +70,27 @@ $sizes: 3, 4, 5, 6;
       }
     }
 
+    &-25 {
+      label {
+        width: 28px; height: 28px;
+      }
+    }
+
     &-28 {
       label {
         width: 22px; height: 22px;
+      }
+    }
+
+    &-30 {
+      label {
+        width: 20px; height: 20px;
+      }
+    }
+
+    &-36 {
+      label {
+        width: 18px; height: 18px;
       }
     }
   }

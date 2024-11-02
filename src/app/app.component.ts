@@ -14,6 +14,7 @@ import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
 import {debounceTime, finalize, take} from "rxjs/operators";
+import {CONFIG_SOUNDS} from "./core/types/setupSounds";
 
 
 @Component({
@@ -54,7 +55,7 @@ export class AppComponent implements OnInit {
     playing: new FormControl(false, { nonNullable: true }),
     bpm: new FormControl(100, { nonNullable: true }),
     volume: new FormControl(100, { nonNullable: true }),
-    swing: new FormControl(0, { nonNullable: true })
+    swing: new FormControl({value: 0, disabled: true}, { nonNullable: true })
   });
 
   formGroupBeats = new FormGroup<IFormGroupBeats>({
@@ -104,14 +105,14 @@ export class AppComponent implements OnInit {
 
   public decBeats() {
     let value = this.formGroupBeats.controls.beats.value;
-    if (value) {
+    if (value && value > 1) {
       this.formGroupBeats.controls.beats.patchValue(--value);
     }
   }
 
   public incBeats() {
     let value = this.formGroupBeats.controls.beats.value;
-    if (value) {
+    if (value && value < 6) {
       this.formGroupBeats.controls.beats.patchValue(++value);
     }
   }
@@ -143,6 +144,7 @@ export class AppComponent implements OnInit {
 
   public setSounds(sound: SoundsEnum) {
     this.activeSound = sound;
+    this._changeSounds()
   }
 
   public setupActiveSound(drum: DrumHitsEnum, sound: SoundEnum) {
@@ -155,6 +157,19 @@ export class AppComponent implements OnInit {
     e.stopPropagation();
 
     c.patchValue(v === 2 ? 0 : ++v)
+  }
+
+  private _changeSounds() {
+    const setup = CONFIG_SOUNDS[this.activeSound];
+    if (setup) {
+      Object.entries(setup).forEach(([key, value]) => {
+        if (value) {
+          this.setupActiveSound(key as DrumHitsEnum, value)
+        }
+      })
+    } else {
+      alert('Не додано конфігурацію для цього звучання! Зверніться до розробника за поміччю!')
+    }
   }
 
   private _autoSetGrid() {
@@ -237,6 +252,14 @@ export class AppComponent implements OnInit {
       this._stop();
       playing && this._play();
     });
+
+    this.formGroupControls.controls.swing.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((control) => {
+        console.log(control);
+
+      })
+
     this.formGroupControls.controls.volume.valueChanges
       .subscribe((gain) => {
         this.audio.setVolume(0.01*gain);

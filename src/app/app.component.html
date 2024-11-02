@@ -1,4 +1,5 @@
 <table class="main" [formGroup]="formGroupControls">
+<!--  FIRST-->
   <tr>
     <td rowspan="2">
       <div class="btn-play">
@@ -46,7 +47,7 @@
     </ng-container>
 
     <td rowspan="3">
-      <div class="label">volume</div>
+      <div class="label">VOLUME</div>
       <label class="range-volume">
         <input type="range" min="0" max="300" formControlName="volume">
         <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
@@ -54,21 +55,23 @@
 
     </td>
   </tr>
+<!--  SECOND-->
   <tr>
     <td>
-      <button class="w-full btn-default">progressive tempo</button>
+      <button class="w-full btn-default" disabled>progressive tempo</button>
     </td>
     <td>
-      <button class="w-full btn-default">beat hider</button>
+      <button class="w-full btn-default" disabled>beat hider</button>
     </td>
     <td class="module-swing">
-      <div class="label">swing {{ swing }} %</div>
+      <div class="label">SWING {{ swing }} %</div>
       <label class="range-swing">
         <input type="range" min="0" max="100" formControlName="swing">
         <span [ngStyle]="{ width: swing + '%' }"></span>
       </label>
     </td>
   </tr>
+<!--  THIRD-->
   <tr>
     <td>
       <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
@@ -107,7 +110,9 @@
         <div class="fieldset" formArrayName="hh"
              [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
-            <label for="hh_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
+            <label for="hh_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
               <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
             </label>
@@ -116,7 +121,9 @@
         <div class="fieldset" formArrayName="snare"
              [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
-            <label for="snare_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
+            <label for="snare_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
               <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
             </label>
@@ -125,7 +132,9 @@
         <div class="fieldset" formArrayName="kick"
              [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
-            <label for="kick_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
+            <label for="kick_{{i}}"
+                   [attr.data-check]="_.value"
+                   [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
               <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
             </label>
@@ -183,11 +192,11 @@
       > {{ s }} </button>
 
     </td>
-    <td colspan="3">
-      <button>save</button>
-      <button>rename</button>
-      <button>delete</button>
-      <button>i</button>
+    <td colspan="3" class="navigate-section">
+      <button disabled>save</button>
+      <button disabled>rename</button>
+      <button disabled>delete</button>
+<!--      <button>i</button>-->
     </td>
   </tr>
 

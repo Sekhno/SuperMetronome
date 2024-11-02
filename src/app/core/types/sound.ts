@@ -3,6 +3,8 @@ export enum SoundEnum {
   Click_02 = 'Clicks/Cub_low',
   Click_03 = 'Clicks/Logic_Hi',
   Click_04 = 'Clicks/Logic_low',
+  Click_05 = 'Clicks/Metronome',
+  Click_06 = 'Clicks/MetronomeUp',
 
   Kick_01 = 'Kicks/adt_kick_death',
   Kick_02 = 'Kicks/adt_kick_huge',
@@ -49,6 +51,8 @@ export const SOUND_DATA: Array<{ key: SoundEnum, value: string }> = [
   { key: SoundEnum.Click_02, value: 'Click 2' },
   { key: SoundEnum.Click_03, value: 'Click 3' },
   { key: SoundEnum.Click_04, value: 'Click 4' },
+  { key: SoundEnum.Click_05, value: 'Click 5' },
+  { key: SoundEnum.Click_06, value: 'Click 6' },
   { key: SoundEnum.Kick_01, value: 'Kick 1' },
   { key: SoundEnum.Kick_02, value: 'Kick 2' },
   { key: SoundEnum.Kick_03, value: 'Kick 3' },
