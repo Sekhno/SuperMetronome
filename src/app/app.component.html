@@ -99,10 +99,13 @@
 
     </td>
   </tr>
+
+<!--  EDIT GROOVE-->
   <tr>
     <td colspan="6" [ngSwitch]="curSection">
       <section [formGroup]="formGroupGroove" *ngSwitchCase="sectionRoutes.Edit">
-        <div class="fieldset" formArrayName="hh" [ngClass]="'fieldset-' + subs">
+        <div class="fieldset" formArrayName="hh"
+             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
             <label for="hh_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
@@ -110,7 +113,8 @@
             </label>
           </ng-container>
         </div>
-        <div class="fieldset" formArrayName="snare" [ngClass]="'fieldset-' + subs">
+        <div class="fieldset" formArrayName="snare"
+             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
             <label for="snare_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
@@ -118,7 +122,8 @@
             </label>
           </ng-container>
         </div>
-        <div class="fieldset" formArrayName="kick" [ngClass]="'fieldset-' + subs">
+        <div class="fieldset" formArrayName="kick"
+             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
           <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
             <label for="kick_{{i}}" [attr.data-check]="_.value" [ngClass]="{current: this.curBit === i}"
                    (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
@@ -168,6 +173,8 @@
       </section>
     </td>
   </tr>
+
+<!--  NAVIGATION-->
   <tr>
     <td colspan="3" class="navigate-section">
       <button *ngFor="let s of sections"
@@ -183,6 +190,8 @@
       <button>i</button>
     </td>
   </tr>
+
+<!--  BANK RHYTHM SOUND-->
   <tr>
     <td colspan="6">
       <table class="bank">
