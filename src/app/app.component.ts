@@ -14,6 +14,7 @@ import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
 import {debounceTime, finalize, take} from "rxjs/operators";
+import {CONFIG_SOUNDS} from "./core/types/setupSounds";
 
 
 @Component({
@@ -143,6 +144,7 @@ export class AppComponent implements OnInit {
 
   public setSounds(sound: SoundsEnum) {
     this.activeSound = sound;
+    this._changeSounds()
   }
 
   public setupActiveSound(drum: DrumHitsEnum, sound: SoundEnum) {
@@ -155,6 +157,19 @@ export class AppComponent implements OnInit {
     e.stopPropagation();
 
     c.patchValue(v === 2 ? 0 : ++v)
+  }
+
+  private _changeSounds() {
+    const setup = CONFIG_SOUNDS[this.activeSound];
+    if (setup) {
+      Object.entries(setup).forEach(([key, value]) => {
+        if (value) {
+          this.setupActiveSound(key as DrumHitsEnum, value)
+        }
+      })
+    } else {
+      alert('Не додано конфігурацію для цього звучання! Зверніться до розробника за поміччю!')
+    }
   }
 
   private _autoSetGrid() {
