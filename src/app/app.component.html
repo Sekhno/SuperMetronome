@@ -1,245 +1,247 @@
-<table class="main" [formGroup]="formGroupControls">
-<!--  FIRST-->
-  <tr>
-    <td rowspan="2">
-      <div class="btn-play">
-        <input type="checkbox" formControlName="playing" id="play">
-        <label for="play">
-          <img ngSrc="assets/images/icons/play_arrow_24dp_E8EAED.svg" width="100" height="100" alt="play" priority>
+<div class="wrapper">
+  <table class="main" [formGroup]="formGroupControls">
+    <!--  FIRST-->
+    <tr>
+      <td rowspan="2">
+        <div class="btn-play">
+          <input type="checkbox" formControlName="playing" id="play">
+          <label for="play">
+            <img ngSrc="assets/images/icons/play_arrow_24dp_E8EAED.svg" width="100" height="100" alt="play" priority>
+          </label>
+        </div>
+      </td>
+      <td rowspan="2">
+        <div class="bpm-control">
+          <div> {{ bars }} {{ playing ? 'bars' : null }} </div>
+          <div> BPM </div>
+          <div> {{ bpm }} </div>
+        </div>
+      </td>
+      <td>
+        <button class="btn-tap w-full" (click)="tapTempo.tap()">tap</button>
+      </td>
+      <ng-container [formGroup]="formGroupBeats">
+        <td class="module-counter">
+          <div class="name"> Beats </div>
+          <div class="func">
+            <button class="btn-counter" (click)="decBeats()">
+              <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
+            </button>
+            <span> {{ beats }} </span>
+            <button class="btn-counter" (click)="incBeats()">
+              <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
+            </button>
+          </div>
+        </td>
+        <td class="module-counter">
+          <div class="name"> Subs </div>
+          <div class="func">
+            <button class="btn-counter" (click)="decSubs()">
+              <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
+            </button>
+            <span> {{ subs }} </span>
+            <button class="btn-counter" (click)="incSubs()">
+              <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <td rowspan="3">
+        <div class="label">VOLUME</div>
+        <label class="range-volume">
+          <input type="range" min="0" max="300" formControlName="volume">
+          <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
         </label>
-      </div>
-    </td>
-    <td rowspan="2">
-      <div class="bpm-control">
-        <div> {{ bars }} {{ playing ? 'bars' : null }} </div>
-        <div> BPM </div>
-        <div> {{ bpm }} </div>
-      </div>
-    </td>
-    <td>
-      <button class="btn-tap w-full" (click)="tapTempo.tap()">tap</button>
-    </td>
-    <ng-container [formGroup]="formGroupBeats">
-      <td class="module-counter">
-        <div class="name"> Beats </div>
-        <div class="func">
-          <button class="btn-counter" (click)="decBeats()">
-            <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-          </button>
-          <span> {{ beats }} </span>
-          <button class="btn-counter" (click)="incBeats()">
-            <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-          </button>
+
+      </td>
+    </tr>
+    <!--  SECOND-->
+    <tr>
+      <td>
+        <button class="w-full btn-default" disabled>progressive tempo</button>
+      </td>
+      <td>
+        <button class="w-full btn-default" disabled>beat hider</button>
+      </td>
+      <td class="module-swing">
+        <div class="label">SWING {{ swing }} %</div>
+        <label class="range-swing">
+          <input type="range" min="0" max="100" formControlName="swing">
+          <span [ngStyle]="{ width: swing + '%' }"></span>
+        </label>
+      </td>
+    </tr>
+    <!--  THIRD-->
+    <tr>
+      <td>
+        <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
+          <button [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</button>
+          <div class="select" *ngIf="isShowCountSelect">
+            <div class="option"
+                 (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
+            > 1 </div>
+            <div class="option"
+                 (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false"
+            > 2 </div>
+          </div>
         </div>
       </td>
-      <td class="module-counter">
-        <div class="name"> Subs </div>
-        <div class="func">
-          <button class="btn-counter" (click)="decSubs()">
-            <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-          </button>
-          <span> {{ subs }} </span>
-          <button class="btn-counter" (click)="incSubs()">
-            <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-          </button>
-        </div>
+      <td>
+        <button class="btn-temp" (click)="decBPM()">
+          <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
+        </button>
+        <button class="btn-temp" (click)="incBPM()">
+          <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
+        </button>
       </td>
-    </ng-container>
+      <td colspan="3">
+        <label class="range-temp">
+          <input  type="range" min="40" max="250" formControlName="bpm">
+          <span [ngStyle]="{ width: (((bpm - 40) * 100) / 210) + '%' }"></span>
+        </label>
 
-    <td rowspan="3">
-      <div class="label">VOLUME</div>
-      <label class="range-volume">
-        <input type="range" min="0" max="300" formControlName="volume">
-        <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
-      </label>
+      </td>
+    </tr>
 
-    </td>
-  </tr>
-<!--  SECOND-->
-  <tr>
-    <td>
-      <button class="w-full btn-default" disabled>progressive tempo</button>
-    </td>
-    <td>
-      <button class="w-full btn-default" disabled>beat hider</button>
-    </td>
-    <td class="module-swing">
-      <div class="label">SWING {{ swing }} %</div>
-      <label class="range-swing">
-        <input type="range" min="0" max="100" formControlName="swing">
-        <span [ngStyle]="{ width: swing + '%' }"></span>
-      </label>
-    </td>
-  </tr>
-<!--  THIRD-->
-  <tr>
-    <td>
-      <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
-        <button [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</button>
-        <div class="select" *ngIf="isShowCountSelect">
-          <div class="option"
-               (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
-          > 1 </div>
-          <div class="option"
-               (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false"
-          > 2 </div>
-        </div>
-      </div>
-    </td>
-    <td>
-      <button class="btn-temp" (click)="decBPM()">
-        <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-      </button>
-      <button class="btn-temp" (click)="incBPM()">
-        <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-      </button>
-    </td>
-    <td colspan="3">
-      <label class="range-temp">
-        <input  type="range" min="40" max="250" formControlName="bpm">
-        <span [ngStyle]="{ width: (((bpm - 40) * 100) / 210) + '%' }"></span>
-      </label>
+    <!--  EDIT GROOVE-->
+    <tr>
+      <td colspan="6" [ngSwitch]="curSection">
+        <section [formGroup]="formGroupGroove" *ngSwitchCase="sectionRoutes.Edit">
+          <div class="fieldset" formArrayName="hh"
+               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
+            <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
+              <label for="hh_{{i}}"
+                     [attr.data-check]="_.value"
+                     [ngClass]="{current: this.curBit === i}"
+                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
+              </label>
+            </ng-container>
+          </div>
+          <div class="fieldset" formArrayName="snare"
+               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
+            <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
+              <label for="snare_{{i}}"
+                     [attr.data-check]="_.value"
+                     [ngClass]="{current: this.curBit === i}"
+                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
+              </label>
+            </ng-container>
+          </div>
+          <div class="fieldset" formArrayName="kick"
+               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
+            <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
+              <label for="kick_{{i}}"
+                     [attr.data-check]="_.value"
+                     [ngClass]="{current: this.curBit === i}"
+                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
+              </label>
+            </ng-container>
+          </div>
+        </section>
 
-    </td>
-  </tr>
+        <section *ngSwitchCase="sectionRoutes.Patterns">
+          Patterns
+        </section>
 
-<!--  EDIT GROOVE-->
-  <tr>
-    <td colspan="6" [ngSwitch]="curSection">
-      <section [formGroup]="formGroupGroove" *ngSwitchCase="sectionRoutes.Edit">
-        <div class="fieldset" formArrayName="hh"
-             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
-          <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
-            <label for="hh_{{i}}"
-                   [attr.data-check]="_.value"
-                   [ngClass]="{current: this.curBit === i}"
-                   (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-              <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
-            </label>
-          </ng-container>
-        </div>
-        <div class="fieldset" formArrayName="snare"
-             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
-          <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
-            <label for="snare_{{i}}"
-                   [attr.data-check]="_.value"
-                   [ngClass]="{current: this.curBit === i}"
-                   (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-              <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
-            </label>
-          </ng-container>
-        </div>
-        <div class="fieldset" formArrayName="kick"
-             [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
-          <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
-            <label for="kick_{{i}}"
-                   [attr.data-check]="_.value"
-                   [ngClass]="{current: this.curBit === i}"
-                   (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-              <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
-            </label>
-          </ng-container>
-        </div>
-      </section>
+        <section *ngSwitchCase="sectionRoutes.Sounds">
+          <table class="bank">
+            <tr>
+              <td>
+                <ul appAutoScroll>
+                  <li *ngFor="let s of sound"
+                      [ngClass]="{ active: curActiveSounds.HH === s.key}"
+                      (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
+                  > {{ s.value }} </li>
+                </ul>
+              </td>
+              <td>
+                <ul appAutoScroll>
+                  <li *ngFor="let s of sound"
+                      [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
+                      (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
+                  > {{ s.value }} </li>
+                </ul>
+              </td>
+              <td>
+                <ul appAutoScroll>
+                  <li *ngFor="let s of sound"
+                      [ngClass]="{ active: curActiveSounds.KICK === s.key }"
+                      (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
+                  > {{ s.value }} </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </section>
 
-      <section *ngSwitchCase="sectionRoutes.Patterns">
-        Patterns
-      </section>
+        <section *ngSwitchCase="sectionRoutes.Mixer">
+          Mixer
+        </section>
+      </td>
+    </tr>
 
-      <section *ngSwitchCase="sectionRoutes.Sounds">
+    <!--  NAVIGATION-->
+    <tr>
+      <td colspan="3" class="navigate-section">
+        <button *ngFor="let s of sections"
+                [ngClass]="{active: curSection === s}"
+                (click)="curSection = s"
+        > {{ s }} </button>
+
+      </td>
+      <td colspan="3" class="navigate-section">
+        <button disabled>save</button>
+        <button disabled>rename</button>
+        <button disabled>delete</button>
+        <!--      <button>i</button>-->
+      </td>
+    </tr>
+
+    <!--  BANK RHYTHM SOUND-->
+    <tr>
+      <td colspan="6">
         <table class="bank">
+          <thead>
+          <tr>
+            <th>bank</th>
+            <th>rhythm</th>
+            <th>sounds</th>
+          </tr>
+          </thead>
+          <tbody>
           <tr>
             <td>
-              <ul appAutoScroll>
-                <li *ngFor="let s of sound"
-                    [ngClass]="{ active: curActiveSounds.HH === s.key}"
-                    (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
-                > {{ s.value }} </li>
+              <ul appAutoScroll [activeItem]="activeBank">
+                <li *ngFor="let b of banks" (click)="setBank(b.key)"
+                    [ngClass]="{ active: activeBank === b.key }"
+                > {{ b.value }} </li>
               </ul>
             </td>
             <td>
-              <ul appAutoScroll>
-                <li *ngFor="let s of sound"
-                    [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
-                    (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
-                > {{ s.value }} </li>
+              <ul appAutoScroll [activeItem]="activeGrid">
+                <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
+                    [ngClass]="{ active: activeGrid === r.key }"
+                > {{ r.value }} </li>
               </ul>
             </td>
             <td>
-              <ul appAutoScroll>
-                <li *ngFor="let s of sound"
-                    [ngClass]="{ active: curActiveSounds.KICK === s.key }"
-                    (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
+              <ul appAutoScroll [activeItem]="activeSound">
+                <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
+                    [ngClass]="{ active: activeSound === s.key }"
                 > {{ s.value }} </li>
               </ul>
             </td>
           </tr>
+          </tbody>
         </table>
-      </section>
-
-      <section *ngSwitchCase="sectionRoutes.Mixer">
-        Mixer
-      </section>
-    </td>
-  </tr>
-
-<!--  NAVIGATION-->
-  <tr>
-    <td colspan="3" class="navigate-section">
-      <button *ngFor="let s of sections"
-              [ngClass]="{active: curSection === s}"
-              (click)="curSection = s"
-      > {{ s }} </button>
-
-    </td>
-    <td colspan="3" class="navigate-section">
-      <button disabled>save</button>
-      <button disabled>rename</button>
-      <button disabled>delete</button>
-<!--      <button>i</button>-->
-    </td>
-  </tr>
-
-<!--  BANK RHYTHM SOUND-->
-  <tr>
-    <td colspan="6">
-      <table class="bank">
-        <thead>
-        <tr>
-          <th>bank</th>
-          <th>rhythm</th>
-          <th>sounds</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>
-            <ul appAutoScroll [activeItem]="activeBank">
-              <li *ngFor="let b of banks" (click)="setBank(b.key)"
-                  [ngClass]="{ active: activeBank === b.key }"
-              > {{ b.value }} </li>
-            </ul>
-          </td>
-          <td>
-            <ul appAutoScroll [activeItem]="activeGrid">
-              <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
-                  [ngClass]="{ active: activeGrid === r.key }"
-              > {{ r.value }} </li>
-            </ul>
-          </td>
-          <td>
-            <ul appAutoScroll [activeItem]="activeSound">
-              <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
-                  [ngClass]="{ active: activeSound === s.key }"
-              > {{ s.value }} </li>
-            </ul>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
-</table>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 
