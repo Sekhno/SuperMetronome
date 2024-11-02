@@ -29,13 +29,20 @@ $sizes: 3, 4, 5, 6;
     }
 
     &[data-check="2"] {
-      //background-color: r
       background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.2) 100%);
     }
 
     &.current {
       box-shadow: 0 0 2px 1px red;
     }
+
+    //$steps: 100;
+    //
+    //@for $i from 0 through $steps {
+    //  &.swing_#{$i} {
+    //    width: calc(40px + (#{$i}/$steps/2 * 40px)) !important;
+    //  }
+    //}
   }
 
   &.length {

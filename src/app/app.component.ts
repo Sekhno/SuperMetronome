@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
     playing: new FormControl(false, { nonNullable: true }),
     bpm: new FormControl(100, { nonNullable: true }),
     volume: new FormControl(100, { nonNullable: true }),
-    swing: new FormControl(0, { nonNullable: true })
+    swing: new FormControl({value: 0, disabled: true}, { nonNullable: true })
   });
 
   formGroupBeats = new FormGroup<IFormGroupBeats>({
@@ -252,6 +252,14 @@ export class AppComponent implements OnInit {
       this._stop();
       playing && this._play();
     });
+
+    this.formGroupControls.controls.swing.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((control) => {
+        console.log(control);
+
+      })
+
     this.formGroupControls.controls.volume.valueChanges
       .subscribe((gain) => {
         this.audio.setVolume(0.01*gain);
