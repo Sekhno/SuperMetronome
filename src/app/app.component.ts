@@ -105,7 +105,7 @@ export class AppComponent implements OnInit {
 
   public decBeats() {
     let value = this.formGroupBeats.controls.beats.value;
-    if (value) {
+    if (value && value > 1) {
       this.formGroupBeats.controls.beats.patchValue(--value);
     }
   }

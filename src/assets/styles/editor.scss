@@ -45,6 +45,12 @@ $sizes: 3, 4, 5, 6;
       }
     }
 
+    &-18 {
+      label {
+        width: 34px; height: 34px;
+      }
+    }
+
     &-20 {
       label {
         width: 34px; height: 34px;
@@ -52,6 +58,12 @@ $sizes: 3, 4, 5, 6;
     }
 
     &-24 {
+      label {
+        width: 28px; height: 28px;
+      }
+    }
+
+    &-25 {
       label {
         width: 28px; height: 28px;
       }
