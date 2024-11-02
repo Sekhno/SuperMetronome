@@ -8,7 +8,7 @@ export enum ControlSectionRoute {
 
 export const CONTROL_SECTION_VALUES = [
   ControlSectionRoute.Edit,
-  ControlSectionRoute.Patterns,
+  // ControlSectionRoute.Patterns,
   ControlSectionRoute.Sounds,
   ControlSectionRoute.Mixer
 ];
