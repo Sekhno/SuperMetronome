@@ -3,7 +3,7 @@ import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule}
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
-import {DrumHitsEnum, SimpleEnum} from "./core/enums/sounds.enum";
+import {DrumHitsEnum, SIMPLE_ENUMS, SimpleEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
 import {DATA_GRIDS, Grids, GridsEnum, NotesType, NoteType} from "./core/types/notes";
 import {CONTROL_SECTION_VALUES, ControlSectionRoute} from "./core/types/aplication";
@@ -188,19 +188,22 @@ export class AppComponent implements OnInit {
     const dueTime = 0;
     const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
+
     if (!bpm || !beats || !subs) throw Error();
+
     const fullPeriodOrScheduler = ((60 / bpm) * 1000 );
     const periodOrScheduler = fullPeriodOrScheduler / beats;
 
     if (this.countPreStart) {
       const counts = this.countPreStart * beats + 1;
+
       timer(dueTime, fullPeriodOrScheduler)
         .pipe(take(counts), finalize(() => {
           this._onMetronome(periodOrScheduler, dueTime)
         }))
         .subscribe((count) => {
           if (counts !== count + 1) {
-            this.audio.playSound(SimpleEnum.Count, 2)
+            this.audio.playSound(SIMPLE_ENUMS[count], 2)
           }
         })
     }
