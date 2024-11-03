@@ -19,8 +19,13 @@ $td-double-padding: 20px;
   max-width: $main-width;
   margin: auto;
 
-  box-shadow: 0 0 60px black;
-  border-radius: 4px;
+  //box-shadow: 0 0 60px black;
+  //border-radius: 4px;
+
+  border-radius: 3rem;
+  box-shadow: .8rem .8rem 1.4rem #276585,
+             -.2rem -.2rem 1.8rem #18789b;
+
 
   td {
     text-align: center;
