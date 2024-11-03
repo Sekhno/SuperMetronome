@@ -6,6 +6,14 @@ export enum SoundEnum {
   Click_05 = 'Clicks/Metronome',
   Click_06 = 'Clicks/MetronomeUp',
 
+  Count_01 = 'Count/English Female - 1',
+  Count_02 = 'Count/English Female - 2',
+  Count_03 = 'Count/English Female - 3',
+  Count_04 = 'Count/English Female - 4',
+  Count_05 = 'Count/English Female - 5',
+  Count_06 = 'Count/English Female - 6',
+  Count_07 = 'Count/English Female - 7',
+
   Kick_01 = 'Kicks/adt_kick_death',
   Kick_02 = 'Kicks/adt_kick_huge',
   Kick_03 = 'Kicks/adt_kick_large',
@@ -89,4 +97,14 @@ export const SOUND_DATA: Array<{ key: SoundEnum, value: string }> = [
   { key: SoundEnum.HiHat_17, value: 'HiHat 17' },
   { key: SoundEnum.HiHat_18, value: 'HiHat 18' },
   { key: SoundEnum.HiHat_19, value: 'HiHat 19' },
+];
+
+export const COUNTS = [
+  SoundEnum.Count_01,
+  SoundEnum.Count_02,
+  SoundEnum.Count_03,
+  SoundEnum.Count_04,
+  SoundEnum.Count_05,
+  SoundEnum.Count_06,
+  SoundEnum.Count_07
 ];

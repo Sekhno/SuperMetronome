@@ -314,9 +314,11 @@ $td-double-padding: 20px;
 
     .label {
       position: absolute;
-      left: 50%; top: -10px;
+      left: 50%; top: 5px;
       white-space: nowrap;
+      font-size: 0.8em;
       transform: translateX(-50%);
+
     }
   }
 }
