@@ -250,14 +250,14 @@ export class AppComponent implements OnInit {
 
   private _onSubscribe() {
     this.formGroupControls.valueChanges
-      .pipe(debounceTime(300))
+      .pipe(debounceTime(500))
       .subscribe(({ bpm, playing, volume }) => {
-      this._stop();
-      playing && this._play();
+        this._stop();
+        playing && this._play();
     });
 
     this.formGroupControls.controls.swing.valueChanges
-      .pipe(debounceTime(300))
+      .pipe(debounceTime(500))
       .subscribe((control) => {
         console.log(control);
 
