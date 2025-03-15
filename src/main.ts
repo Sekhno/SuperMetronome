@@ -5,6 +5,7 @@ import {AudioService} from './app/core/services/audio.service';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {environment} from "./environments/environment";
+import {provideExperimentalZonelessChangeDetection} from "@angular/core";
 
 const isMobile = window.matchMedia("(pointer: coarse)").matches;
 const rootComponent = isMobile ? AppMobileComponent : AppComponent;
@@ -14,6 +15,7 @@ const analytics = getAnalytics(app);
 
 bootstrapApplication(rootComponent , {
   providers: [
+    provideExperimentalZonelessChangeDetection(),
     {
       provide: AudioService, useClass: AudioService
     }
