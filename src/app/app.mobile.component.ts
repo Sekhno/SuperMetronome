@@ -17,12 +17,11 @@ import {ControlSectionRoute} from "./core/types/aplication";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
 
 @Component({
-  standalone: true,
-  selector: 'app-root',
-  templateUrl: './app.mobile.component.html',
-  styleUrls: ['./app.mobile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective]
+    selector: 'app-root',
+    templateUrl: './app.mobile.component.html',
+    styleUrls: ['./app.mobile.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective]
 })
 export class AppMobileComponent extends AppComponent implements AfterContentInit {
 

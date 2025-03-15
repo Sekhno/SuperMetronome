@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, OnInit, signal} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Subscription, timer} from "rxjs";
@@ -18,12 +18,11 @@ import {CONFIG_SOUNDS} from "./core/types/setupSounds";
 
 
 @Component({
-  standalone: true,
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage]
 })
 export class AppComponent implements OnInit {
 
@@ -304,7 +303,8 @@ export class AppComponent implements OnInit {
   constructor(
     private audio: AudioService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._onSubscribe();
