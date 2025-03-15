@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, OnInit, signal} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {Subscription, timer} from "rxjs";
@@ -304,7 +304,8 @@ export class AppComponent implements OnInit {
   constructor(
     private audio: AudioService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._onSubscribe();
