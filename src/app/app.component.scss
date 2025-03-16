@@ -19,13 +19,6 @@ $td-double-padding: 20px;
   width: 100%; height: auto;
   max-width: $main-width;
   margin: auto;
-  //background: white;
-  //box-shadow: 0 0 60px black;
-  //border-radius: 4px;
-
-  //border-radius: 3rem;
-  //box-shadow: .8rem .8rem 1.4rem #276585,
-  //           -.2rem -.2rem 1.8rem #18789b;
 
   tr {
     &:nth-child(2) {
@@ -39,12 +32,14 @@ $td-double-padding: 20px;
         padding-top: 8px;
       }
     }
-  }
 
+    &.footer {
+      color: var(--p-teal-700);
+    }
+  }
 
   td {
     text-align: center;
-    //border: 1px solid blue;
 
     &.td {
       &-bpm-count {
@@ -229,15 +224,3 @@ $td-double-padding: 20px;
 }
 
 
-
-
-
-
-@keyframes flicker {
-  from {
-    opacity: 0.3;
-  }
-  to {
-    opacity: 1;
-  }
-}
