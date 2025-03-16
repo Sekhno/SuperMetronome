@@ -1,7 +1,7 @@
 import {AbstractControl, FormArray, FormControl} from "@angular/forms";
 
 export interface IFormGroupControl {
-  playing: FormControl<boolean>
+  // playing: FormControl<boolean>
   bpm: FormControl<number>,
   volume: FormControl<number>
   swing: FormControl<number>

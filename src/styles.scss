@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import "assets/styles/prime";
 @import "assets/styles/main";
 @import "assets/styles/range";
 @import "assets/styles/scrollbar";
@@ -9,3 +11,6 @@
 
 
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

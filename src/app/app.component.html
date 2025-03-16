@@ -4,79 +4,63 @@
     <tr>
       <td rowspan="2">
         <div class="btn-play">
-          <input type="checkbox" formControlName="playing" id="play">
-          <label for="play">
-            <img ngSrc="assets/images/icons/play_arrow_24dp_E8EAED.svg" width="100" height="100" alt="play" priority>
-          </label>
+          <p-button
+            (onClick)="onPlay()"
+            [icon]="playing() ? 'pi pi-pause' : 'pi pi-play'">
+          </p-button>
         </div>
       </td>
       <td rowspan="2">
         <div class="bpm-control">
-          <div> {{ bars }} {{ playing ? 'bars' : null }} </div>
+          <div> {{ bars() }} {{ playing() ? 'bars' : null }} </div>
           <div> BPM </div>
-          <div> {{ bpm }} </div>
+          <div> {{ bpm() }} </div>
         </div>
       </td>
       <td>
-        <button class="btn-tap w-full" (click)="tapTempo.tap()">tap</button>
+        <p-button (onClick)="tapTempo.tap()">tap</p-button>
       </td>
       <ng-container [formGroup]="formGroupBeats">
         <td class="module-counter">
           <div class="name"> Beats </div>
           <div class="func">
-            <button class="btn-counter" (click)="decBeats()">
-              <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-            </button>
+            <p-button (onClick)="decBeats()" icon="pi pi-minus"></p-button>
             <span> {{ beats }} </span>
-            <button class="btn-counter" (click)="incBeats()">
-              <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-            </button>
+            <p-button (onClick)="incBeats()" icon="pi pi-plus"></p-button>
           </div>
         </td>
         <td class="module-counter">
           <div class="name"> Subs </div>
           <div class="func">
-            <button class="btn-counter" (click)="decSubs()">
-              <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-            </button>
+            <p-button  (onClick)="decSubs()" icon="pi pi-minus"></p-button>
             <span> {{ subs }} </span>
-            <button class="btn-counter" (click)="incSubs()">
-              <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-            </button>
+            <p-button  (onClick)="incSubs()" icon="pi pi-plus"></p-button>
           </div>
         </td>
       </ng-container>
 
       <td rowspan="3">
-<!--        <div class="label">VOLUME</div>-->
-        <label class="range-volume">
-          <input type="range" min="0" max="300" formControlName="volume">
-          <span [ngStyle]="{height: 'calc('+ volume * 100 / 400 +'%)'}"></span>
-        </label>
-
+        <p-slider formControlName="volume" orientation="vertical"  />
       </td>
     </tr>
     <!--  SECOND-->
     <tr>
       <td>
-        <button class="w-full btn-default" disabled>progressive tempo</button>
+        <p-button disabled>progressive tempo</p-button>
       </td>
       <td>
-        <button class="w-full btn-default" disabled>beat hider</button>
+        <p-button disabled>beat hider</p-button>
       </td>
       <td class="module-swing">
         <div class="label">SWING {{ swing }} %</div>
-        <label class="range-swing">
-          <input type="range" min="0" max="100" formControlName="swing">
-          <span [ngStyle]="{ width: swing + '%' }"></span>
-        </label>
+        <p-slider formControlName="swing"  min="0" max="100"/>
       </td>
     </tr>
     <!--  THIRD-->
     <tr>
       <td>
         <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
-          <button [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</button>
+          <p-button  [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</p-button>
           <div class="select" *ngIf="isShowCountSelect">
             <div class="option"
                  (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
@@ -88,32 +72,25 @@
         </div>
       </td>
       <td>
-        <button class="btn-temp" (click)="decBPM()">
-          <img ngSrc="assets/images/icons/remove_24dp_E8EAED.svg" width="24" height="24" alt="count">
-        </button>
-        <button class="btn-temp" (click)="incBPM()">
-          <img ngSrc="assets/images/icons/add_24dp_E8EAED.svg" width="24" height="24" alt="count">
-        </button>
+        <p-button icon="pi pi-minus" (onClick)="decBPM()"></p-button>
+        <p-button icon="pi pi-plus" (onClick)="incBPM()"></p-button>
       </td>
       <td colspan="3">
-        <label class="range-temp">
-          <input  type="range" min="40" max="250" formControlName="bpm">
-          <span [ngStyle]="{ width: (((bpm - 40) * 100) / 210) + '%' }"></span>
-        </label>
+        <p-slider formControlName="bpm" min="40" max="250" />
 
       </td>
     </tr>
 
     <!--  EDIT GROOVE-->
     <tr>
-      <td colspan="6" [ngSwitch]="curSection">
+      <td colspan="6" [ngSwitch]="formNavigationControl.value">
         <section [formGroup]="formGroupGroove" *ngSwitchCase="sectionRoutes.Edit">
           <div class="fieldset" formArrayName="hh"
                [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
             <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
               <label for="hh_{{i}}"
                      [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit === i}"
+                     [ngClass]="{current: this.curBit() === i}"
                      (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
                 <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
               </label>
@@ -124,7 +101,7 @@
             <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
               <label for="snare_{{i}}"
                      [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit === i}"
+                     [ngClass]="{current: this.curBit() === i}"
                      (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
                 <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
               </label>
@@ -135,7 +112,7 @@
             <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
               <label for="kick_{{i}}"
                      [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit === i}"
+                     [ngClass]="{current: this.curBit() === i}"
                      (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
                 <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
               </label>
@@ -187,16 +164,22 @@
     <!--  NAVIGATION-->
     <tr>
       <td colspan="3" class="navigate-section">
-        <button *ngFor="let s of sections"
-                [ngClass]="{active: curSection === s}"
-                (click)="curSection = s"
-        > {{ s }} </button>
+<!--        <button  *ngFor="let s of sections"-->
+<!--                [ngClass]="{active: curSection === s}"-->
+<!--                (click)="curSection = s"-->
+<!--        > {{ s }} </button>-->
+        <p-selectbutton [options]="navigationOptions1" [formControl]="formNavigationControl"
+                        optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
+        ></p-selectbutton>
 
       </td>
       <td colspan="3" class="navigate-section">
-        <button disabled>save</button>
-        <button disabled>rename</button>
-        <button disabled>delete</button>
+        <p-selectbutton [options]="navigationOptions2"
+                        optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
+        ></p-selectbutton>
+<!--        <button  disabled>save</button>-->
+<!--        <button  disabled>rename</button>-->
+<!--        <button  disabled>delete</button>-->
         <!--      <button>i</button>-->
       </td>
     </tr>

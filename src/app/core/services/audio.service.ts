@@ -35,7 +35,8 @@ export class AudioService {
     source.start(0);
     source.stop(source.buffer.length);
     source.onended = function() {
-      source.buffer = source.onended = null;
+      source.onended = null;
+      // source.buffer = null;
       source.disconnect();
     }
   }

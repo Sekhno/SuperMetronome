@@ -1,3 +1,6 @@
-$main-background: #000 radial-gradient(ellipse at top,#4ebffb 0,#276585 70%);
+//$main-background: #000 radial-gradient(ellipse at top,#4ebffb 0,#276585 70%);
+$main-background:  var(--mat-sys-primary-container);
 
 $main-font-family: "Roboto", sans-serif;
+
+$font-color-primary: #005cbb;
