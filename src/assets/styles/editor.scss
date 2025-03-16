@@ -22,14 +22,14 @@ $sizes: 3, 4, 5, 6;
     display: inline-block;
     margin-right: 1px;
     border-radius: 4px;
-    background: radial-gradient(circle, rgba(255,255,255,.1) -200%, rgba(0,0,0,1) 100%);
+    background: radial-gradient(circle, rgba(255,255,255,.1) -200%, var(--p-indigo-950) 100%);
 
     &[data-check="1"] {
-      background: radial-gradient(circle, rgba(255,255,255,1) -200%, rgba(255,255,255,.1) 100%);
+      background: radial-gradient(circle, var(--p-teal-500) -200%, rgba(255,255,255,.1) 100%);
     }
 
     &[data-check="2"] {
-      background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.2) 100%);
+      background: radial-gradient(circle, var(--p-blue-500) 0%, rgba(255,255,255,.2) 100%);
     }
 
     &.current {

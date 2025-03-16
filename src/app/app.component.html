@@ -3,12 +3,10 @@
     <!--  FIRST-->
     <tr>
       <td rowspan="2">
-        <div class="btn-play">
-          <p-button
-            (onClick)="onPlay()"
-            [icon]="playing() ? 'pi pi-pause' : 'pi pi-play'">
-          </p-button>
-        </div>
+        <p-button class="btn-playing" size="large"
+          (onClick)="onPlay()"
+          [icon]="playing() ? 'pi pi-pause' : 'pi pi-play'">
+        </p-button>
       </td>
       <td rowspan="2">
         <div class="bpm-control">
@@ -18,7 +16,7 @@
         </div>
       </td>
       <td>
-        <p-button (onClick)="tapTempo.tap()">tap</p-button>
+        <p-button class="btn-tap" (onClick)="tapTempo.tap()">tap</p-button>
       </td>
       <ng-container [formGroup]="formGroupBeats">
         <td class="module-counter">
@@ -46,10 +44,10 @@
     <!--  SECOND-->
     <tr>
       <td>
-        <p-button disabled>progressive tempo</p-button>
+        <p-button class="btn-default" disabled>progressive tempo</p-button>
       </td>
       <td>
-        <p-button disabled>beat hider</p-button>
+        <p-button class="btn-default" disabled>beat hider</p-button>
       </td>
       <td class="module-swing">
         <div class="label">SWING {{ swing }} %</div>
@@ -60,18 +58,23 @@
     <tr>
       <td>
         <div class="btn-count" [ngClass]="{ active: isShowCountSelect }">
-          <p-button  [ngClass]="{ selected: countPreStart }" (click)="isShowCountSelect = !isShowCountSelect">count in</p-button>
-          <div class="select" *ngIf="isShowCountSelect">
-            <div class="option"
-                 (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
-            > 1 </div>
-            <div class="option"
-                 (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false"
-            > 2 </div>
-          </div>
+          <p-button
+            [ngClass]="{ selected: countPreStart }" (onClick)="isShowCountSelect = !isShowCountSelect"
+          >count in</p-button>
+
+          @if (isShowCountSelect) {
+            <div class="select">
+              <div class="option"
+                   (click)="countPreStart = countPreStart === 1 ? null : 1; isShowCountSelect = false"
+              > 1 </div>
+              <div class="option"
+                   (click)="countPreStart = countPreStart === 2 ? null : 2; isShowCountSelect = false"
+              > 2 </div>
+            </div>
+          }
         </div>
       </td>
-      <td>
+      <td class="td-bpm-count">
         <p-button icon="pi pi-minus" (onClick)="decBPM()"></p-button>
         <p-button icon="pi pi-plus" (onClick)="incBPM()"></p-button>
       </td>
@@ -164,23 +167,17 @@
     <!--  NAVIGATION-->
     <tr>
       <td colspan="3" class="navigate-section">
-<!--        <button  *ngFor="let s of sections"-->
-<!--                [ngClass]="{active: curSection === s}"-->
-<!--                (click)="curSection = s"-->
-<!--        > {{ s }} </button>-->
-        <p-selectbutton [options]="navigationOptions1" [formControl]="formNavigationControl"
-                        optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
+        <p-selectbutton
+          [options]="navigationOptions1" [formControl]="formNavigationControl"
+          optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
         ></p-selectbutton>
 
       </td>
       <td colspan="3" class="navigate-section">
-        <p-selectbutton [options]="navigationOptions2"
-                        optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
+        <p-selectbutton
+          [options]="navigationOptions2"
+          optionLabel="name" optionValue="value" optionDisabled="disabled" aria-labelledby="basic"
         ></p-selectbutton>
-<!--        <button  disabled>save</button>-->
-<!--        <button  disabled>rename</button>-->
-<!--        <button  disabled>delete</button>-->
-        <!--      <button>i</button>-->
       </td>
     </tr>
 

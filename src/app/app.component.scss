@@ -45,6 +45,16 @@ $td-double-padding: 20px;
   td {
     text-align: center;
     //border: 1px solid blue;
+
+    &.td {
+      &-bpm-count {
+        p-button {
+          &:first-child {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -127,19 +137,14 @@ $td-double-padding: 20px;
       }
     }
   }
-
-  //&-counter {
-  //  width: 40px; height: 40px;
-  //}
-
-  &-default {
-    padding: $btn-padding;
-  }
 }
 
 .bpm {
   &-control {
+
     div:nth-child(3) {
+      width: 100px;
+      margin: auto;
       font-size: 60px;
       font-weight: lighter;
     }
@@ -216,22 +221,10 @@ $td-double-padding: 20px;
   }
 
   &-swing {
-
-
     p-slider {
       display: block;
       padding: 0 8px;
     }
-    //position: relative;
-    //
-    //.label {
-    //  position: absolute;
-    //  left: 50%; top: 5px;
-    //  white-space: nowrap;
-    //  font-size: 0.8em;
-    //  transform: translateX(-50%);
-    //
-    //}
   }
 }
 
