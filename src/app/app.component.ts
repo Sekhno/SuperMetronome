@@ -22,7 +22,7 @@ import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
-import {count, debounceTime, finalize, take, takeUntil} from "rxjs/operators";
+import {count, debounceTime, finalize, take, takeUntil, throttleTime} from "rxjs/operators";
 import {CONFIG_SOUNDS} from "./core/types/setupSounds";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSliderModule} from "@angular/material/slider";
@@ -105,7 +105,6 @@ export class AppComponent
   private readonly onDestroy$ = new Subject<void>();
 
   public onPlay() {
-
     this.playing.update((isPlaying) => {
       this._stop();
       if (!isPlaying) {
@@ -129,20 +128,12 @@ export class AppComponent
 
   public decBPM() {
     this.tapTempo.bpm.update(v => v-1);
-
-    if (this.playing()) {
-      this.playing.update(() => false);
-      this._stop()
-    }
+    this._onStopPlaying()
   }
 
   public incBPM() {
     this.tapTempo.bpm.update(v => v+1);
-
-    if (this.playing()) {
-      this.playing.update(() => false);
-      this._stop()
-    }
+    this._onStopPlaying();
   }
 
   public decBeats() {
@@ -177,21 +168,23 @@ export class AppComponent
     this.activeGrid = grid;
     this.formGroupGroove = AppComponent._getFormGroupGroove(4,4, Grids.get(grid));
     this._autoSetRecomendationSound();
+    this._onStopPlaying();
   }
 
   public setBank(bank: BankEnum) {
     this.activeBank = bank;
     this._autoSetGrid();
+    this._onStopPlaying()
   }
 
   public setSounds(sound: SoundsEnum) {
     this.activeSound = sound;
-    this._changeSounds()
+    this._changeSounds();
   }
 
   public setupActiveSound(drum: DrumHitsEnum, sound: SoundEnum) {
     const options = { [drum]: sound } as Record<DrumHitsEnum, SoundEnum>;
-    this.audio.setActiveSounds(options)
+    this.audio.setActiveSounds(options);
   }
 
   public onClickFormGroupGrooveLabel(e: MouseEvent, c: AbstractControl, v: number) {
@@ -199,6 +192,13 @@ export class AppComponent
     e.stopPropagation();
 
     c.patchValue(v === 2 ? 0 : ++v)
+  }
+
+  private _onStopPlaying() {
+    if (this.playing()) {
+      this.playing.update(() => false);
+      this._stop()
+    }
   }
 
   private _changeSounds() {
@@ -228,7 +228,6 @@ export class AppComponent
 
   private _play() {
     const dueTime = 0;
-    // const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
 
     if (!this.bpm() || !beats || !subs) throw Error();
@@ -255,13 +254,10 @@ export class AppComponent
   }
 
   private _onMetronome(periodOrScheduler: number, dueTime = 0) {
-    // const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
     if (!this.bpm() || !beats || !subs) throw Error();
     const { hh, snare, kick } = this.formGroupGroove.controls;
     const length = beats * subs - 2;
-
-
 
     this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
       if (this.curBit() > length) {
@@ -294,7 +290,7 @@ export class AppComponent
 
   private _onSubscribe() {
     this.formGroupControls.controls.bpm.valueChanges
-      .pipe(takeUntil(this.onDestroy$))
+      .pipe(takeUntil(this.onDestroy$), throttleTime(16))
       .subscribe((bpm) => {
         this.tapTempo.bpm.update(() => bpm);
         if (this.playing()) {
