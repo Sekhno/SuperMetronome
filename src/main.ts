@@ -8,6 +8,7 @@ import {environment} from "./environments/environment";
 import {provideExperimentalZonelessChangeDetection} from "@angular/core";
 import {providePrimeNG} from "primeng/config";
 import Aura from '@primeng/themes/aura';
+import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 
 const isMobile = window.matchMedia("(pointer: coarse)").matches;
 const rootComponent = isMobile ? AppMobileComponent : AppComponent;
@@ -18,6 +19,7 @@ const analytics = getAnalytics(app);
 bootstrapApplication(rootComponent , {
   providers: [
     provideExperimentalZonelessChangeDetection(),
+    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: Aura

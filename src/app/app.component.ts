@@ -31,6 +31,8 @@ import {SliderModule} from "primeng/slider";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {Event} from "@angular/router";
 import {c} from "@angular/core/navigation_types.d-u4EOrrdZ";
+import {DialogModule} from "primeng/dialog";
+import {ToggleSwitchModule} from "primeng/toggleswitch";
 
 
 @Component({
@@ -41,12 +43,24 @@ import {c} from "@angular/core/navigation_types.d-u4EOrrdZ";
   standalone: true,
   imports: [
     ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage,
-    ButtonModule, SliderModule, SelectButtonModule, FormsModule
+    ButtonModule, SliderModule, SelectButtonModule, DialogModule, ToggleSwitchModule, FormsModule
   ]
 })
 export class AppComponent
   implements OnInit, OnDestroy
 {
+  beatHiderVisible = false;
+  isBeatHiderActive = signal(false)
+
+  hiderModeOptions = [
+    { name: '7.1', value: 71 },
+    { name: '3.1', value: 31 },
+    { name: '6.2', value: 62 },
+    { name: '2.2', value: 22 },
+    { name: '4.4', value: 44 },
+    { name: '2.6', value: 26 },
+    { name: '8.8', value: 88 }
+  ]
   navigationOptions1 = [
     { name: ControlSectionRoute.Edit, value: ControlSectionRoute.Edit },
     { name: ControlSectionRoute.Sounds, value: ControlSectionRoute.Sounds },
@@ -84,9 +98,11 @@ export class AppComponent
   curActiveSounds = this.audio.activeSounds;
 
   playing = signal(false);
-  bpm = computed(() => this.tapTempo.bpm())
+  bpm = computed(() => this.tapTempo.bpm());
   // volume = signal(100)
 
+  hiderModeOptionsControl = new FormControl(31, { nonNullable: true });
+  hideLightsCheckedControl = new FormControl(false, { nonNullable: true });
   formNavigationControl = new FormControl(ControlSectionRoute.Edit, { nonNullable: true })
   formGroupControls = new FormGroup<IFormGroupControl>({
     // playing: new FormControl(false, { nonNullable: true }),
@@ -266,11 +282,21 @@ export class AppComponent
       }
       this.curBit.update(v => v+1);
 
+      if (this.isBeatHiderActive()) {
+        const hiderModeOption = this.hiderModeOptionsControl.value;
+        const playCount = Math.floor(hiderModeOption/10);
+        const hideCount = hiderModeOption%10;
+        const denominator = playCount + hideCount;
+        const remainder = this.bars() % denominator;
+
+        if (remainder < 1 || remainder > playCount) return;
+      }
+
       if (hh.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.HiHat, hh.controls[this.curBit()].value);
       if (snare.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.Snare, snare.controls[this.curBit()].value);
       if (kick.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.Kick, kick.controls[this.curBit()].value);
 
-      this.cdr.markForCheck();
+      // this.cdr.markForCheck();
     });
   }
 

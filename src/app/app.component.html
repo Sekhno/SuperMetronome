@@ -47,7 +47,27 @@
         <p-button class="btn-default" disabled>progressive tempo</p-button>
       </td>
       <td>
-        <p-button class="btn-default" disabled>beat hider</p-button>
+        <p-button class="btn-default"
+                  [severity]="isBeatHiderActive() ? 'success' : 'primary'"
+                  (click)="beatHiderVisible = true"
+        >beat hider</p-button>
+        <p-dialog header="Beat Hider" [modal]="true" [(visible)]="beatHiderVisible" [style]="{ width: '35rem' }">
+          <span>The best tool to practice inner tempo</span>
+
+          <h3>HIDER MODE</h3>
+          <p-selectbutton
+            [options]="hiderModeOptions" [formControl]="hiderModeOptionsControl"
+            optionLabel="name" optionValue="value" aria-labelledby="basic"
+          ></p-selectbutton>
+
+          <h3>HIDE LIGHTS</h3>
+          <p-toggleswitch [formControl]="hideLightsCheckedControl" />
+          <div class="footer">
+            <p-button label="OFF" (onClick)="isBeatHiderActive.set(false)"/>
+            <p-button label="ON" (onClick)="isBeatHiderActive.set(true)"/>
+          </div>
+
+        </p-dialog>
       </td>
       <td class="module-swing">
         <div class="label">SWING {{ swing }} %</div>
@@ -86,81 +106,94 @@
 
     <!--  EDIT GROOVE-->
     <tr>
-      <td colspan="6" [ngSwitch]="formNavigationControl.value">
-        <section [formGroup]="formGroupGroove" *ngSwitchCase="sectionRoutes.Edit">
-          <div class="fieldset" formArrayName="hh"
-               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
-            <ng-container *ngFor="let _ of formGroupGroove.controls.hh.controls; let i = index">
-              <label for="hh_{{i}}"
-                     [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit() === i}"
-                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-                <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
-              </label>
-            </ng-container>
-          </div>
-          <div class="fieldset" formArrayName="snare"
-               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
-            <ng-container *ngFor="let _ of formGroupGroove.controls.snare.controls; let i = index">
-              <label for="snare_{{i}}"
-                     [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit() === i}"
-                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-                <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
-              </label>
-            </ng-container>
-          </div>
-          <div class="fieldset" formArrayName="kick"
-               [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
-            <ng-container *ngFor="let _ of formGroupGroove.controls.kick.controls; let i = index">
-              <label for="kick_{{i}}"
-                     [attr.data-check]="_.value"
-                     [ngClass]="{current: this.curBit() === i}"
-                     (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
-                <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
-              </label>
-            </ng-container>
-          </div>
-        </section>
+      <td colspan="6">
+        @switch (formNavigationControl.value) {
+          @case (sectionRoutes.Edit) {
+            <section [formGroup]="formGroupGroove">
+              <div class="fieldset" formArrayName="hh"
+                   [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.hh.controls.length]">
+                @for (_ of formGroupGroove.controls.hh.controls; track i; let i = $index) {
+                  <label for="hh_{{i}}"
+                         [attr.data-check]="_.value"
+                         [ngClass]="{current: this.curBit() === i}"
+                         (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                    <input type="checkbox" [formControlName]="i" id="hh_{{i}}">
+                  </label>
+                }
+              </div>
+              <div class="fieldset" formArrayName="snare"
+                   [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.snare.controls.length]">
+                @for (_ of formGroupGroove.controls.snare.controls; track i; let i = $index) {
+                  <label for="snare_{{i}}"
+                         [attr.data-check]="_.value"
+                         [ngClass]="{current: this.curBit() === i}"
+                         (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                    <input type="checkbox" [formControlName]="i" id="snare_{{i}}">
+                  </label>
+                }
+              </div>
+              <div class="fieldset" formArrayName="kick"
+                   [ngClass]="['fieldset-' + subs, 'length-' + formGroupGroove.controls.kick.controls.length]">
+                @for (_ of formGroupGroove.controls.kick.controls; track i; let i = $index) {
+                  <label for="kick_{{i}}"
+                         [attr.data-check]="_.value"
+                         [ngClass]="{current: this.curBit() === i}"
+                         (click)="onClickFormGroupGrooveLabel($event, _, _.value)">
+                    <input type="checkbox" [formControlName]="i" id="kick_{{i}}">
+                  </label>
+                }
+              </div>
+            </section>
+          }
 
-        <section *ngSwitchCase="sectionRoutes.Patterns">
-          Patterns
-        </section>
+          @case (sectionRoutes.Sounds) {
+            <section>
+              <table class="bank">
+                <tr>
+                  <td>
+                    <ul appAutoScroll>
+                      @for (s of sound; track s.key) {
+                        <li [ngClass]="{ active: curActiveSounds.HH === s.key}"
+                            (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
+                        > {{ s.value }} </li>
+                      }
+                    </ul>
+                  </td>
+                  <td>
+                    <ul appAutoScroll>
+                      @for (s of sound; track s.key) {
+                        <li [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
+                            (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
+                        > {{ s.value }} </li>
+                      }
+                    </ul>
+                  </td>
+                  <td>
+                    <ul appAutoScroll>
+                      @for (s of sound; track s.key) {
+                        <li [ngClass]="{ active: curActiveSounds.KICK === s.key }"
+                            (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
+                        > {{ s.value }} </li>
+                      }
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </section>
+          }
 
-        <section *ngSwitchCase="sectionRoutes.Sounds">
-          <table class="bank">
-            <tr>
-              <td>
-                <ul appAutoScroll>
-                  <li *ngFor="let s of sound"
-                      [ngClass]="{ active: curActiveSounds.HH === s.key}"
-                      (click)="setupActiveSound(this.drumHitsEnum.HiHat, s.key)"
-                  > {{ s.value }} </li>
-                </ul>
-              </td>
-              <td>
-                <ul appAutoScroll>
-                  <li *ngFor="let s of sound"
-                      [ngClass]="{ active: curActiveSounds.SNARE === s.key }"
-                      (click)="setupActiveSound(this.drumHitsEnum.Snare, s.key)"
-                  > {{ s.value }} </li>
-                </ul>
-              </td>
-              <td>
-                <ul appAutoScroll>
-                  <li *ngFor="let s of sound"
-                      [ngClass]="{ active: curActiveSounds.KICK === s.key }"
-                      (click)="setupActiveSound(this.drumHitsEnum.Kick, s.key)"
-                  > {{ s.value }} </li>
-                </ul>
-              </td>
-            </tr>
-          </table>
-        </section>
+          @case (sectionRoutes.Patterns) {
+            <section>
+              Patterns
+            </section>
+          }
 
-        <section *ngSwitchCase="sectionRoutes.Mixer">
-          Mixer
-        </section>
+          @case (sectionRoutes.Mixer) {
+            <section>
+              Mixer
+            </section>
+          }
+        }
       </td>
     </tr>
 
@@ -196,23 +229,29 @@
           <tr>
             <td>
               <ul appAutoScroll [activeItem]="activeBank">
-                <li *ngFor="let b of banks" (click)="setBank(b.key)"
-                    [ngClass]="{ active: activeBank === b.key }"
-                > {{ b.value }} </li>
+                @for (b of banks; track b.key) {
+                  <li (click)="setBank(b.key)"
+                      [ngClass]="{ active: activeBank === b.key }"
+                  > {{ b.value }} </li>
+                }
               </ul>
             </td>
             <td>
               <ul appAutoScroll [activeItem]="activeGrid">
-                <li *ngFor="let r of (rhythms | rhythmFilter : activeBank)" (click)="setGrid(r.key)"
-                    [ngClass]="{ active: activeGrid === r.key }"
-                > {{ r.value }} </li>
+                @for (r of (rhythms | rhythmFilter : activeBank); track r.key) {
+                  <li (click)="setGrid(r.key)"
+                      [ngClass]="{ active: activeGrid === r.key }"
+                  > {{ r.value }} </li>
+                }
               </ul>
             </td>
             <td>
               <ul appAutoScroll [activeItem]="activeSound">
-                <li *ngFor="let s of sounds" (click)="setSounds(s.key)"
-                    [ngClass]="{ active: activeSound === s.key }"
-                > {{ s.value }} </li>
+                @for (s of sounds; track s.key) {
+                  <li (click)="setSounds(s.key)"
+                      [ngClass]="{ active: activeSound === s.key }"
+                  > {{ s.value }} </li>
+                }
               </ul>
             </td>
           </tr>
