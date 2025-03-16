@@ -1,0 +1,27 @@
+//html {
+//  --p-button-primary-background: #005cbb;
+//}
+
+.btn {
+  &-tap, &-playing, &-count, &-default  {
+    .p-button {
+      width: 100%;
+    }
+  }
+
+  &-playing {
+    .p-button {
+       height: 100px;
+    }
+  }
+
+  &-tap {
+    .p-button {
+      height: 60px;
+    }
+  }
+
+
+
+
+}

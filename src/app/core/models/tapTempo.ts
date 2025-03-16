@@ -1,4 +1,5 @@
 import {BehaviorSubject} from "rxjs";
+import {signal} from "@angular/core";
 
 export class TapTempo {
   private readonly timeout = 2000;
@@ -7,8 +8,8 @@ export class TapTempo {
   private lastDifference: number | null = null;
   private timer:  ReturnType<typeof setTimeout> | null = null;
 
-  private _subject = new BehaviorSubject(0);
-  public bpm = this._subject.asObservable();
+  // private _subject = new BehaviorSubject(0);
+  public bpm = signal(100);
 
   constructor() {
   }
@@ -29,7 +30,8 @@ export class TapTempo {
     if (this.times.length > 2){
       const average = this.times.reduce((result, t) => { return result += t }) / this.times.length
       const bpm = (1 / (average / 1000)) * 60;
-      this._subject.next(Math.round(bpm));
+      // this._subject.next(Math.round(bpm));
+      this.bpm.update(() => Math.round(bpm));
     }
   }
 

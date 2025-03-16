@@ -1,7 +1,16 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, OnInit, signal} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  effect,
+  OnDestroy,
+  OnInit,
+  signal
+} from '@angular/core';
+import {AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {Subscription, timer} from "rxjs";
+import {Subject, Subscription, timer} from "rxjs";
 import {AudioService} from './core/services/audio.service';
 import {DrumHitsEnum, SIMPLE_ENUMS, SimpleEnum} from "./core/enums/sounds.enum";
 import {IFormGroupBeats, IFormGroupControl} from "./core/types/formGroup";
@@ -13,23 +22,47 @@ import {TapTempo} from "./core/models/tapTempo";
 import {RhythmFilterPipe} from "./core/pipes/rhythm-filter.pipe";
 import {SOUND_DATA, SoundEnum} from "./core/types/sound";
 import {AutoScrollDirective} from "./core/directives/auto-scroll.directive";
-import {debounceTime, finalize, take} from "rxjs/operators";
+import {count, debounceTime, finalize, take, takeUntil} from "rxjs/operators";
 import {CONFIG_SOUNDS} from "./core/types/setupSounds";
+import {MatButtonModule} from "@angular/material/button";
+import {MatSliderModule} from "@angular/material/slider";
+import {ButtonModule} from "primeng/button";
+import {SliderModule} from "primeng/slider";
+import {SelectButtonModule} from "primeng/selectbutton";
+import {Event} from "@angular/router";
+import {c} from "@angular/core/navigation_types.d-u4EOrrdZ";
 
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule, CommonModule, RhythmFilterPipe, AutoScrollDirective, NgOptimizedImage,
+    ButtonModule, SliderModule, SelectButtonModule, FormsModule
+  ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent
+  implements OnInit, OnDestroy
+{
+  navigationOptions1 = [
+    { name: ControlSectionRoute.Edit, value: ControlSectionRoute.Edit },
+    { name: ControlSectionRoute.Sounds, value: ControlSectionRoute.Sounds },
+    { name: ControlSectionRoute.Mixer, value: ControlSectionRoute.Mixer, disabled: true }
+  ];
+
+  navigationOptions2 = [
+    { name: 'save', value: 1, disabled: true },
+    { name: 'rename', value: 2, disabled: true },
+    { name: 'delete', value: 3, disabled: true }
+  ];
 
   tapTempo = new TapTempo();
   isShowCountSelect = false;
   countPreStart: 1 | 2 | null = null;
-  bars = 1;
+  bars = signal(1);
 
   sound = SOUND_DATA;
   banks = BANK_DATA;
@@ -46,12 +79,17 @@ export class AppComponent implements OnInit {
   sections = CONTROL_SECTION_VALUES;
   curSection = ControlSectionRoute.Edit;
   sectionRoutes = ControlSectionRoute;
-  curBit = -1;
+  curBit = signal(-1);
 
   curActiveSounds = this.audio.activeSounds;
 
+  playing = signal(false);
+  bpm = computed(() => this.tapTempo.bpm())
+  // volume = signal(100)
+
+  formNavigationControl = new FormControl(ControlSectionRoute.Edit, { nonNullable: true })
   formGroupControls = new FormGroup<IFormGroupControl>({
-    playing: new FormControl(false, { nonNullable: true }),
+    // playing: new FormControl(false, { nonNullable: true }),
     bpm: new FormControl(100, { nonNullable: true }),
     volume: new FormControl(100, { nonNullable: true }),
     swing: new FormControl({value: 0, disabled: true}, { nonNullable: true })
@@ -64,12 +102,17 @@ export class AppComponent implements OnInit {
 
   formGroupGroove = AppComponent._getFormGroupGroove(4,4, Grids.get(GridsEnum.Beat_01));
 
-  public get playing(): boolean {
-    return this.formGroupControls.controls.playing.value;
-  }
+  private readonly onDestroy$ = new Subject<void>();
 
-  public get bpm() {
-    return this.formGroupControls.controls.bpm.value;
+  public onPlay() {
+
+    this.playing.update((isPlaying) => {
+      this._stop();
+      if (!isPlaying) {
+        this._play();
+      }
+      return !isPlaying
+    });
   }
 
   public get beats() {
@@ -84,21 +127,21 @@ export class AppComponent implements OnInit {
     return this.formGroupControls.controls.swing.value;
   }
 
-  public get volume() {
-    return this.formGroupControls.controls.volume.value
-  }
-
   public decBPM() {
-    let value = this.formGroupControls.controls.bpm.value;
-    if (value) {
-      this.formGroupControls.controls.bpm.patchValue(--value);
+    this.tapTempo.bpm.update(v => v-1);
+
+    if (this.playing()) {
+      this.playing.update(() => false);
+      this._stop()
     }
   }
 
   public incBPM() {
-    let value = this.formGroupControls.controls.bpm.value;
-    if (value) {
-      this.formGroupControls.controls.bpm.patchValue(++value);
+    this.tapTempo.bpm.update(v => v+1);
+
+    if (this.playing()) {
+      this.playing.update(() => false);
+      this._stop()
     }
   }
 
@@ -151,7 +194,7 @@ export class AppComponent implements OnInit {
     this.audio.setActiveSounds(options)
   }
 
-  public onClickFormGroupGrooveLabel(e: Event, c: AbstractControl, v: number) {
+  public onClickFormGroupGrooveLabel(e: MouseEvent, c: AbstractControl, v: number) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -185,12 +228,12 @@ export class AppComponent implements OnInit {
 
   private _play() {
     const dueTime = 0;
-    const { bpm } = this.formGroupControls.value;
+    // const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
 
-    if (!bpm || !beats || !subs) throw Error();
+    if (!this.bpm() || !beats || !subs) throw Error();
 
-    const fullPeriodOrScheduler = ((60 / bpm) * 1000 );
+    const fullPeriodOrScheduler = ((60 / this.bpm()) * 1000 );
     const periodOrScheduler = fullPeriodOrScheduler / beats;
 
     if (this.countPreStart) {
@@ -212,22 +255,24 @@ export class AppComponent implements OnInit {
   }
 
   private _onMetronome(periodOrScheduler: number, dueTime = 0) {
-    const { bpm } = this.formGroupControls.value;
+    // const { bpm } = this.formGroupControls.value;
     const { beats, subs } = this.formGroupBeats.value;
-    if (!bpm || !beats || !subs) throw Error();
+    if (!this.bpm() || !beats || !subs) throw Error();
     const { hh, snare, kick } = this.formGroupGroove.controls;
     const length = beats * subs - 2;
 
+
+
     this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
-      if (this.curBit > length) {
-        this.bars++;
+      if (this.curBit() > length) {
+        this.bars.update(v => v+1);
         this._resetCurBit();
       }
-      this.curBit++;
+      this.curBit.update(v => v+1);
 
-      if (hh.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.HiHat, hh.controls[this.curBit].value);
-      if (snare.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.Snare, snare.controls[this.curBit].value);
-      if (kick.controls[this.curBit].value) this.audio.playSound(DrumHitsEnum.Kick, kick.controls[this.curBit].value);
+      if (hh.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.HiHat, hh.controls[this.curBit()].value);
+      if (snare.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.Snare, snare.controls[this.curBit()].value);
+      if (kick.controls[this.curBit()].value) this.audio.playSound(DrumHitsEnum.Kick, kick.controls[this.curBit()].value);
 
       this.cdr.markForCheck();
     });
@@ -240,46 +285,43 @@ export class AppComponent implements OnInit {
   }
 
   private _resetBars() {
-    this.bars = 1;
+    this.bars.update(() => 1);
   }
 
   private _resetCurBit() {
-    this.curBit = -1
+    this.curBit.update(() => -1)
   }
 
   private _onSubscribe() {
-    this.formGroupControls.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe(({ bpm, playing, volume }) => {
-        this._stop();
-        playing && this._play();
-    });
+    this.formGroupControls.controls.bpm.valueChanges
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((bpm) => {
+        this.tapTempo.bpm.update(() => bpm);
+        if (this.playing()) {
+          this.playing.update(() => false);
+          this._stop()
+        }
+      });
 
-    this.formGroupControls.controls.swing.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe((control) => {
-        console.log(control);
-
-      })
+    // TO DO
+    // this.formGroupControls.controls.swing.valueChanges
+    //   .pipe(debounceTime(500))
+    //   .subscribe((control) => {
+    //     console.log(control);
+    //   });
 
     this.formGroupControls.controls.volume.valueChanges
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((gain) => {
         this.audio.setVolume(0.01*gain);
       })
 
-    this.formGroupBeats.valueChanges.subscribe(({ beats, subs }) => {
-      if (!beats || !subs) throw Error();
-      this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, Grids.get(GridsEnum.Beat_01));
-    });
-
-    this.tapTempo.bpm.subscribe((bmp) => {
-      if (bmp) {
-        this.formGroupControls.controls.bpm.patchValue(bmp);
-      }
-
-    })
-
-    // this.formGroupGroove.valueChanges.subscribe(console.log)
+    this.formGroupBeats.valueChanges
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(({ beats, subs }) => {
+        if (!beats || !subs) throw Error();
+        this.formGroupGroove = AppComponent._getFormGroupGroove(beats, subs, Grids.get(this.activeGrid));
+      });
   }
 
   private static _getFormGroupGroove(beats: number, subs: number, notes: NotesType = [[], [], []]) {
@@ -303,10 +345,14 @@ export class AppComponent implements OnInit {
   constructor(
     private audio: AudioService,
     private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._onSubscribe();
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 }
