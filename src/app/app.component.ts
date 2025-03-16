@@ -249,7 +249,7 @@ export class AppComponent
     if (!this.bpm() || !beats || !subs) throw Error();
 
     const fullPeriodOrScheduler = ((60 / this.bpm()) * 1000 );
-    const periodOrScheduler = fullPeriodOrScheduler / beats;
+    const periodOrScheduler = fullPeriodOrScheduler / subs;
 
     if (this.countPreStart) {
       const counts = this.countPreStart * beats + 1;
@@ -275,7 +275,7 @@ export class AppComponent
     const { hh, snare, kick } = this.formGroupGroove.controls;
     const length = beats * subs - 2;
 
-    this.metronome = timer(dueTime, periodOrScheduler).subscribe((count) => {
+    this.metronome = timer(dueTime, periodOrScheduler).subscribe(() => {
       if (this.curBit() > length) {
         this.bars.update(v => v+1);
         this._resetCurBit();
